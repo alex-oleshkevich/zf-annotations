@@ -1,9 +1,9 @@
 {
-    "name": "alex-oleshkevich/zf2-annotated-router",
-    "description": "ZF2 module for annotation-based routing configuration.",
+    "name": "alex-oleshkevich/zf2-annotations",
+    "description": "ZF2 module for annotations.",
     "type": "library",
     "license": "GPL",
-    "homepage": "https://github.com/alex-oleshkevich/zf2-annotated-router",
+    "homepage": "https://github.com/alex-oleshkevich/zf2-annotations",
     "authors": [
         {
             "name": "Alex Oleshkevich",
