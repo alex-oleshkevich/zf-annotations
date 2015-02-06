@@ -1,9 +1,9 @@
 {
     "name": "alex-oleshkevich/zf2-annotations",
-    "description": "ZF2 module for annotations.",
+    "description": "ZF2 module for annotated configuration.",
     "type": "library",
     "license": "GPL",
-    "homepage": "https://github.com/alex-oleshkevich/zf2-annotations",
+    "homepage": "https://github.com/alex-oleshkevich/zf-annotations",
     "authors": [
         {
             "name": "Alex Oleshkevich",
