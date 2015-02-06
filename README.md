@@ -5,6 +5,9 @@ The goal of this project is to get rid of large routes configuration arrays in m
 
 ***please note, the module is not well tested yet***
 
+### Requirements
+* PHP >= 5.4.0
+
 ### Installation
 ##### Require via composer
 

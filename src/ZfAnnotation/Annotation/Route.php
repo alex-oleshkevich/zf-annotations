@@ -304,7 +304,7 @@ class Route implements AnnotationInterface
     {
         $params = get_object_vars($annotation);
         foreach ($params as $property => $value) {
-            if (property_exists($this, $property) && !in_array($property, ['name', 'route'])) {
+            if (property_exists($this, $property) && !in_array($property, array('name', 'route'))) {
                 if (!$this->$property) {
                     $this->$property = $value;
                 }
