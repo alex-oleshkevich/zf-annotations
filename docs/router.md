@@ -5,11 +5,6 @@ The goal of this project is to get rid of large routes configuration arrays in m
 
 This module is completely compatible with standard ZF2 router as it generates the same config as defined within module.
 
-#### Install module via composer
-```bash
-composer require alex-oleshkevich/zf2-annotated-router
-```
-
 #### Enable it in application.config.php
 ```php
 return array(

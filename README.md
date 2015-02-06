@@ -3,14 +3,16 @@
 This module allow to define controllers, services, routes and other ZF components via annotations.
 The goal of this project is to get rid of large routes configuration arrays in module configs.
 
-**please note, the module is not well tested yet**
+***please note, the module is not well tested yet***
 
-#### Install module via composer
+## Installation
+##### Require via composer
+
 ```bash
 composer require alex-oleshkevich/zf-annotations
 ```
 
-#### Enable it in application.config.php
+##### Enable it in application.config.php
 ```php
 return array(
     'modules' => array(
@@ -19,6 +21,25 @@ return array(
     ),
     // other content
 );
+```
+
+##### Configure:
+```php
+array(
+    'zf_annotation' => array(
+        // directories where to look for files (eg. __DIR__ . '/../../module)
+        'directories' => array(),
+                             
+        // parse controllers on every request. disable on prod
+        'compile_on_request' => false,
+        
+        // use cached routes instead of controllers parsing, enable on prod
+        'use_cache' => false,
+        
+        // a file to dump router config
+        'cache_file' => 'data/cache/annotated-config.cache.php'
+    ),
+)
 ```
 
 #### Components
