@@ -5,6 +5,10 @@ The goal of this project is to get rid of large routes configuration arrays in m
 
 ***please note, the module is not well tested yet***
 
+[![Build Status](https://travis-ci.org/alex-oleshkevich/zf-annotations.svg)]
+[![Latest Stable Version](https://poser.pugx.org/alex-oleshkevich/zf-annotations/v/stable.svg)](https://packagist.org/packages/alex-oleshkevich/zf-annotations) [![Total Downloads](https://poser.pugx.org/alex-oleshkevich/zf-annotations/downloads.svg)](https://packagist.org/packages/alex-oleshkevich/zf-annotations) [![Latest Unstable Version](https://poser.pugx.org/alex-oleshkevich/zf-annotations/v/unstable.svg)](https://packagist.org/packages/alex-oleshkevich/zf-annotations) [![License](https://poser.pugx.org/alex-oleshkevich/zf-annotations/license.svg)](https://packagist.org/packages/alex-oleshkevich/zf-annotations)
+
+
 ### Requirements
 * PHP >= 5.4.0
 
