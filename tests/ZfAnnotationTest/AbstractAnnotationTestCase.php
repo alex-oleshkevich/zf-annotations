@@ -9,7 +9,7 @@ use Zend\Code\Scanner\DirectoryScanner;
 use Zend\EventManager\EventManager;
 use ZfAnnotation\Config\Collection;
 use ZfAnnotation\Event\ParseEvent;
-use ZfAnnotation\Event\RouteListener;
+use ZfAnnotation\EventListener\RouteListener;
 use ZfAnnotation\Parser\ClassParser;
 
 class AbstractAnnotationTestCase extends PHPUnit_Framework_TestCase
