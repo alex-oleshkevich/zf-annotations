@@ -50,7 +50,7 @@ class Module implements AutoloaderProviderInterface, InitProviderInterface, Conf
         } else {
             // if scanner disable check if we have to load config from cache
             if ($appConfig['zf_annotation']['use_cache']) {
-                // load if file exists 
+                // load if file exists
                 if (file_exists($appConfig['zf_annotation']['cache_file'])) {
                     $config = include $appConfig['zf_annotation']['cache_file'];
                 } else {
@@ -58,7 +58,7 @@ class Module implements AutoloaderProviderInterface, InitProviderInterface, Conf
                 }
             }
         }
-        
+
         $event->getConfigListener()->setMergedConfig(ArrayUtils::merge($appConfig, $config));
     }
 
