@@ -59,7 +59,6 @@ class Module implements AutoloaderProviderInterface, InitProviderInterface, Conf
             }
         }
         
-        var_dump($config);exit;
         $event->getConfigListener()->setMergedConfig(ArrayUtils::merge($appConfig, $config));
     }
 
