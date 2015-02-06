@@ -5,7 +5,7 @@ The goal of this project is to get rid of large routes configuration arrays in m
 
 ***please note, the module is not well tested yet***
 
-## Installation
+### Installation
 ##### Require via composer
 
 ```bash
@@ -42,11 +42,11 @@ array(
 )
 ```
 
-#### Components
+### Components
 
  * [Router](https://github.com/alex-oleshkevich/zf-annotations/tree/master/docs/router.md)
 
-#### Command line usage:
+### Command line usage:
 ```bash
 # Compile and dump routes to cache file
 php public/index.php cache dump
