@@ -1,5 +1,5 @@
 {
-    "name": "alex-oleshkevich/zf2-annotations",
+    "name": "alex-oleshkevich/zf-annotations",
     "description": "ZF2 module for annotated configuration.",
     "type": "library",
     "license": "GPL",
