@@ -1,6 +1,6 @@
 <?php
 /**
- * Annotated Router module for Zend Framework 2
+ * Annotation module for Zend Framework 2
  *
  * @link      https://github.com/alex-oleshkevich/zf2-annotated-router for the canonical source repository
  * @copyright Copyright (c) 2014 Alex Oleshkevich <alex.oleshkevich@gmail.com>
@@ -9,6 +9,7 @@
 
 namespace ZfAnnotation\Service;
 
+use Exception;
 use Zend\Code\Annotation\AnnotationManager;
 use Zend\Code\Annotation\Parser\DoctrineAnnotationParser;
 use Zend\Code\Scanner\DirectoryScanner;
@@ -57,6 +58,9 @@ class ClassParserFactory implements FactoryInterface
             $eventManager->attach(ParseEvent::EVENT_FINISH, array($listenerInstance, 'onParseFinish'));
         }
         
+        if (empty($config['zf_annotation']['directories'])) {
+            throw new Exception('No scan directories configured. See zf_annotation.directories[] config property or refer the documentation.');
+        }
         $directoryScanner = new DirectoryScanner($config['zf_annotation']['directories']);
         return new ClassParser($directoryScanner->getClasses(), $annotationManager, $eventManager, new Collection($config));
     }

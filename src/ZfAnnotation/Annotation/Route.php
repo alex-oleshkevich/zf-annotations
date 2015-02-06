@@ -1,8 +1,8 @@
 <?php
 /**
- * Annotated Router module for Zend Framework 2
+ * Annotation module for Zend Framework 2
  *
- * @link      https://github.com/alex-oleshkevich/zf2-annotated-routerfor the canonical source repository
+ * @link      https://github.com/alex-oleshkevich/zf-annotations the canonical source repository
  * @copyright Copyright (c) 2014 Alex Oleshkevich <alex.oleshkevich@gmail.com>
  * @license   http://en.wikipedia.org/wiki/MIT_License MIT
  */
@@ -304,7 +304,7 @@ class Route implements AnnotationInterface
     {
         $params = get_object_vars($annotation);
         foreach ($params as $property => $value) {
-            if (property_exists($this, $property) && !in_array($property, array('name', 'route'))) {
+            if (property_exists($this, $property) && !in_array($property, ['name', 'route'])) {
                 if (!$this->$property) {
                     $this->$property = $value;
                 }
