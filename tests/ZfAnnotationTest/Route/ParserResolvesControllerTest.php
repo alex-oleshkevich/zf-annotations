@@ -19,6 +19,7 @@ class ParserResolvesControllerTest extends AbstractAnnotationTestCase
 
         $expected = array(
             'type' => 'literal',
+            'priority' => 0,
             'options' => array(
                 'route' => '/index',
                 'defaults' => array(

@@ -185,6 +185,7 @@ class IndexController extends AbstractActionController
      *     name="index",
      *     route="/index/:id/:method",
      *     type="segment",
+     *     priority=1000,
      *     defaults={"controller": "my-controller", "action": "my-action"},
      *     constraints={"id": "\d+", "method": "\w+"}
      * )

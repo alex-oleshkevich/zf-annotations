@@ -210,6 +210,7 @@ class RouteListener implements ListenerInterface
                     'defaults' => $annotation->getDefaults(),
                     'constraints' => $annotation->getConstraints()
                 ),
+                'priority' => (int) $annotation->getPriority(),
                 'may_terminate' => (bool) $annotation->getMayTerminate(),
                 'child_routes' => array()
             )

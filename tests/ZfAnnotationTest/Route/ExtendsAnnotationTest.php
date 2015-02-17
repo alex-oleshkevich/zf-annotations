@@ -15,12 +15,14 @@ class ExtendsAnnotationTest extends AbstractAnnotationTestCase
         $routeConfig = array(
             'default' => array(
                 'type' => 'literal',
+                'priority' => 0,
                 'options' => array(
                     'route' => '/'
                 ),
                 'child_routes' => array(
                     'help' => array(
                         'type' => 'literal',
+                        'priority' => 0,
                         'options' => array(
                             'route' => '/help'
                         ),
@@ -34,18 +36,21 @@ class ExtendsAnnotationTest extends AbstractAnnotationTestCase
         $expected = array(
             'default' => array(
                 'type' => 'literal',
+                'priority' => 0,
                 'options' => array(
                     'route' => '/'
                 ),
                 'child_routes' => array(
                     'help' => array(
                         'type' => 'literal',
+                        'priority' => 0,
                         'options' => array(
                             'route' => '/help'
                         ),
                         'child_routes' => array(
                             'root' => array(
                                 'type' => 'literal',
+                                'priority' => 0,
                                 'options' => array(
                                     'route' => '/root',
                                     'defaults' => array(
@@ -58,6 +63,7 @@ class ExtendsAnnotationTest extends AbstractAnnotationTestCase
                                 'child_routes' => array(
                                     'index' => array(
                                         'type' => 'literal',
+                                        'priority' => 0,
                                         'options' => array(
                                             'route' => '/index',
                                             'defaults' => array(

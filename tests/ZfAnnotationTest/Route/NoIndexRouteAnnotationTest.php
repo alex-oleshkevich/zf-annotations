@@ -16,6 +16,7 @@ class NoIndexRouteAnnotationTest extends AbstractAnnotationTestCase
         $expected = array(
             'root' => array(
                 'type' => 'literal',
+                'priority' => 0,
                 'options' => array(
                     'route' => '/root',
                     'defaults' => array(
@@ -28,6 +29,7 @@ class NoIndexRouteAnnotationTest extends AbstractAnnotationTestCase
                 'child_routes' => array(
                     'index' => array(
                         'type' => 'literal',
+                        'priority' => 0,
                         'options' => array(
                             'route' => '/index',
                             'defaults' => array(
@@ -41,6 +43,7 @@ class NoIndexRouteAnnotationTest extends AbstractAnnotationTestCase
                     ),
                     'edit' => array(
                         'type' => 'literal',
+                        'priority' => 0,
                         'options' => array(
                             'route' => '/edit',
                             'defaults' => array(
@@ -54,6 +57,7 @@ class NoIndexRouteAnnotationTest extends AbstractAnnotationTestCase
                     ),
                     'remove' => array(
                         'type' => 'literal',
+                        'priority' => 0,
                         'options' => array(
                             'route' => '/remove',
                             'defaults' => array(

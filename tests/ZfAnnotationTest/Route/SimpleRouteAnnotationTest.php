@@ -24,6 +24,7 @@ class SimpleRouteAnnotationTest extends AbstractAnnotationTestCase
 
         $expected = array(
             'type' => 'segment',
+            'priority' => 0,
             'options' => array(
                 'route' => '/complete-definition/:id/:method',
                 'defaults' => array(
@@ -49,6 +50,7 @@ class SimpleRouteAnnotationTest extends AbstractAnnotationTestCase
 
         $routeArray = array(
             'type' => 'literal',
+            'priority' => 0,
             'options' => array(
                 'route' => '/route',
                 'defaults' => array(
@@ -71,6 +73,7 @@ class SimpleRouteAnnotationTest extends AbstractAnnotationTestCase
         
         $routeArray = array(
             'type' => 'literal',
+            'priority' => 0,
             'options' => array(
                 'route' => '/no-route',
                 'defaults' => array(
@@ -93,6 +96,7 @@ class SimpleRouteAnnotationTest extends AbstractAnnotationTestCase
 
         $routeArray = array(
             'type' => 'literal',
+            'priority' => 0,
             'options' => array(
                 'route' => '/no-type',
                 'defaults' => array(
@@ -115,6 +119,7 @@ class SimpleRouteAnnotationTest extends AbstractAnnotationTestCase
 
         $routeArray = array(
             'type' => 'literal',
+            'priority' => 0,
             'options' => array(
                 'route' => '/no-controller',
                 'defaults' => array(
@@ -137,6 +142,7 @@ class SimpleRouteAnnotationTest extends AbstractAnnotationTestCase
 
         $routeArray = array(
             'type' => 'literal',
+            'priority' => 0,
             'options' => array(
                 'route' => '/no-action',
                 'defaults' => array(

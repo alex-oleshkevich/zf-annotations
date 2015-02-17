@@ -9,8 +9,8 @@
 
 namespace ZfAnnotation\Annotation;
 
-use ZfAnnotation\Exception\InvalidArgumentException;
 use Zend\Code\Annotation\AnnotationInterface;
+use ZfAnnotation\Exception\InvalidArgumentException;
 
 /**
  * A route annotation.
@@ -75,6 +75,12 @@ class Route implements AnnotationInterface
      * @var string
      */
     public $extends;
+    
+    /**
+     * Route priority.
+     * @var int
+     */
+    public $priority = 0;
 
     /**
      * Unused as AR currently supports only Doctrine's implementation of annotations.
@@ -159,7 +165,7 @@ class Route implements AnnotationInterface
 
     /**
      * @param string $name
-     * @return \ZfAnnotation\Annotation\Route
+     * @return Route
      */
     public function setName($name)
     {
@@ -169,7 +175,7 @@ class Route implements AnnotationInterface
 
     /**
      * @param string $type
-     * @return \ZfAnnotation\Annotation\Route
+     * @return Route
      */
     public function setType($type)
     {
@@ -179,7 +185,7 @@ class Route implements AnnotationInterface
 
     /**
      * @param string $route
-     * @return \ZfAnnotation\Annotation\Route
+     * @return Route
      */
     public function setRoute($route)
     {
@@ -189,7 +195,7 @@ class Route implements AnnotationInterface
 
     /**
      * @param array $defaults
-     * @return \ZfAnnotation\Annotation\Route
+     * @return Route
      */
     public function setDefaults(array $defaults = null)
     {
@@ -199,7 +205,7 @@ class Route implements AnnotationInterface
 
     /**
      * @param array|null $constraints
-     * @return \ZfAnnotation\Annotation\Route
+     * @return Route
      */
     public function setConstraints(array $constraints = null)
     {
@@ -209,7 +215,7 @@ class Route implements AnnotationInterface
 
     /**
      * @param string $name
-     * @return \ZfAnnotation\Annotation\Route
+     * @return Route
      */
     public function setDefaultController($name)
     {
@@ -227,7 +233,7 @@ class Route implements AnnotationInterface
 
     /**
      * @param string $name
-     * @return \ZfAnnotation\Annotation\Route
+     * @return Route
      */
     public function setDefaultAction($name)
     {
@@ -269,7 +275,7 @@ class Route implements AnnotationInterface
 
     /**
      * @param string $extends
-     * @return \ZfAnnotation\Annotation\Route
+     * @return Route
      */
     public function setExtends($extends)
     {
@@ -287,11 +293,29 @@ class Route implements AnnotationInterface
 
     /**
      * @param bool $flag
-     * @return \ZfAnnotation\Annotation\Route
+     * @return Route
      */
     public function setMayTerminate($flag)
     {
         $this->mayTerminate = (bool) $flag;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPriority()
+    {
+        return $this->priority;
+    }
+
+    /**
+     * @param int $priority
+     * @return Route
+     */
+    public function setPriority($priority)
+    {
+        $this->priority = $priority;
         return $this;
     }
 

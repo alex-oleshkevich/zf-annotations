@@ -17,6 +17,7 @@ class NamespacedRouteAnnotationTest extends AbstractAnnotationTestCase
         $expected = array(
             'root' => array(
                 'type' => 'segment',
+                'priority' => 0,
                 'options' => array(
                     'route' => '/root/:id/:method',
                     'defaults' => array(
@@ -32,6 +33,7 @@ class NamespacedRouteAnnotationTest extends AbstractAnnotationTestCase
                 'child_routes' => array(
                     'index' => array(
                         'type' => 'segment',
+                        'priority' => 0,
                         'options' => array(
                             'route' => '/root/:id/:method',
                             'defaults' => array(
@@ -48,6 +50,7 @@ class NamespacedRouteAnnotationTest extends AbstractAnnotationTestCase
                     ),
                     'edit' => array(
                         'type' => 'literal',
+                        'priority' => 0,
                         'options' => array(
                             'route' => '/edit',
                             'defaults' => array(
@@ -61,6 +64,7 @@ class NamespacedRouteAnnotationTest extends AbstractAnnotationTestCase
                     ),
                     'remove' => array(
                         'type' => 'literal',
+                        'priority' => 0,
                         'options' => array(
                             'route' => '/remove',
                             'defaults' => array(
