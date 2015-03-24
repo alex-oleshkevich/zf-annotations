@@ -145,7 +145,7 @@ array (
  *     type="segment",
  *     defaults={"controller": "nobase", "action": "complete-definition-action"},
  *     constraints={"id": "\d+", "method": "\w+"},
- *     mayTerminate: true
+ *     mayTerminate=true
  * )
  */
 public function someAction() {}
