@@ -56,7 +56,7 @@ array(
 
 ### Components
  * [Router](https://github.com/alex-oleshkevich/zf-annotations/tree/master/docs/router.md)
- * [Services](https://github.com/alex-oleshkevich/zf-annotations/tree/master/docs/services.md)
+ * [Services](https://github.com/alex-oleshkevich/zf-annotations/blob/dev/docs/services.md)
 
 ### Read how to add own annotations
 * [Custom annotations](https://github.com/alex-oleshkevich/zf-annotations/tree/master/docs/custom-annotations.md)
