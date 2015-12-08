@@ -55,11 +55,11 @@ array(
 ```
 
 ### Components
- * [Router](https://github.com/alex-oleshkevich/zf-annotations/tree/master/docs/router.md)
- * [Services](https://github.com/alex-oleshkevich/zf-annotations/blob/dev/docs/services.md)
+ * [Router](docs/router.md)
+ * [Services](docs/services.md)
 
 ### Read how to add own annotations
-* [Custom annotations](https://github.com/alex-oleshkevich/zf-annotations/tree/master/docs/custom-annotations.md)
+* [Custom annotations](docs/custom-annotations.md)
 
 ### Performance
 This module is pretty fast, but anyway, parsing of lots of files on each request takes time.  
