@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Annotation module for Zend Framework 2
  *
@@ -12,7 +13,8 @@ namespace ZfAnnotation\Annotation;
 use Zend\Code\Annotation\AnnotationInterface;
 
 /**
- * A route annotation.
+ * A service annotation.
+ * 
  * @Annotation
  */
 class Service implements AnnotationInterface
@@ -41,73 +43,130 @@ class Service implements AnnotationInterface
     /**
      * @var string
      */
-    public $serviceManagerKey = 'service_manager';
+    public $serviceManager = 'service_manager';
+    
+    /**
+     * Used with delegator services.
+     * 
+     * @var string
+     */
+    public $for;
 
     /**
      * @param array $content
      */
     public function initialize($content)
     {
+        
     }
 
+    /**
+     * 
+     * @return string
+     */
     public function getName()
     {
         return $this->name;
     }
 
+    /**
+     * 
+     * @return bool
+     */
     public function hasType()
     {
         return (bool) $this->type;
     }
 
+    /**
+     * 
+     * @return string
+     */
     public function getType()
     {
         return $this->type;
     }
 
-    public function isShared()
-    {
-        return $this->shared;
-    }
-
+    /**
+     * 
+     * @return bool|null
+     */
     public function getShared()
     {
         return $this->shared;
     }
 
-    public function hasAliases()
-    {
-        return !empty($this->getAliases());
-    }
-
+    /**
+     * 
+     * @return array
+     */
     public function getAliases()
     {
         return (array) $this->aliases;
     }
 
-    public function getServiceManagerKey()
+    /**
+     * 
+     * @return string
+     */
+    public function getServiceManager()
     {
-        return $this->serviceManagerKey;
+        return $this->serviceManager;
     }
 
+    /**
+     * 
+     * @param string $name
+     */
     public function setName($name)
     {
         $this->name = $name;
     }
 
+    /**
+     * 
+     * @param string $type
+     */
     public function setType($type)
     {
         $this->type = $type;
     }
 
+    /**
+     * 
+     * @param bool $shared
+     */
     public function setShared($shared)
     {
-        $this->shared = $shared;
+        $this->shared = (bool) $shared;
     }
 
-    public function setAliases($aliases)
+    /**
+     * 
+     * @param array $aliases
+     */
+    public function setAliases(array $aliases = array())
     {
         $this->aliases = $aliases;
     }
+
+    /**
+     * 
+     * @return string
+     */
+    public function getFor()
+    {
+        return $this->for;
+    }
+
+    /**
+     * 
+     * @param string $for
+     */
+    public function setFor($for)
+    {
+        $this->for = $for;
+    }
+
 
 }

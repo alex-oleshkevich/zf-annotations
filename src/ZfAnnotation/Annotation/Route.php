@@ -10,10 +10,8 @@
 namespace ZfAnnotation\Annotation;
 
 use Zend\Code\Annotation\AnnotationInterface;
-use ZfAnnotation\Exception\InvalidArgumentException;
 
 /**
- * A route annotation.
  * @Annotation
  */
 class Route implements AnnotationInterface

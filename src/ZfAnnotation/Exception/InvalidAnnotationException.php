@@ -7,15 +7,11 @@
  * @license   http://en.wikipedia.org/wiki/MIT_License MIT
  */
 
-namespace ZfAnnotation\Annotation;
+namespace ZfAnnotation\Exception;
 
-/**
- * @Annotation
- */
-class ViewHelper extends Service
+use Exception;
+
+class InvalidAnnotationException extends Exception
 {
-    /**
-     * @var string
-     */
-    public $serviceManager = 'view_helpers';
+
 }

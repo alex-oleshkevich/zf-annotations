@@ -1,4 +1,5 @@
 <?php
+
 namespace ZfAnnotation\Parser;
 
 use Exception;
@@ -6,93 +7,101 @@ use Zend\Code\Annotation\AnnotationCollection;
 use Zend\Code\Annotation\AnnotationManager;
 use Zend\Code\Scanner\ClassScanner;
 use Zend\EventManager\EventManager;
-use ZfAnnotation\Config\Collection;
+use Zend\EventManager\ListenerAggregateInterface;
+use Zend\Stdlib\ArrayUtils;
 use ZfAnnotation\Event\ParseEvent;
 
 class ClassParser
 {
+
+    /**
+     *
+     * @var array
+     */
+    protected $config = array();
+    
     /**
      * @var AnnotationManager
      */
     protected $annotationManager;
-    
+
     /**
      * @var EventManager
      */
     protected $eventManager;
 
     /**
-     * @var array
+     * @param array $config
+     * @param AnnotationManager $annotationManager
+     * @param EventManager $eventManager
      */
-    protected $classes;
-
-    /**
-     * @var Collection
-     */
-    protected $configCollection = array();
-    
-    /**
-     * 
-     * @param array $classes
-     * @param \Zend\Code\Annotation\AnnotationManager $annotationManager
-     * @param \Zend\EventManager\EventManager $eventManager
-     * @param \ZfAnnotation\Config\Collection $configCollection
-     */
-    public function __construct(array $classes, AnnotationManager $annotationManager, EventManager $eventManager, Collection $configCollection)
+    public function __construct(array $config, AnnotationManager $annotationManager, EventManager $eventManager)
     {
-        $this->classes = $classes;
-        $this->configCollection = $configCollection;
+        $this->config = $config;
         $this->annotationManager = $annotationManager;
         $this->eventManager = $eventManager;
     }
 
     /**
-     * @return array
+     * 
+     * @param ListenerAggregateInterface $listener
      */
-    public function parse()
+    public function attach(ListenerAggregateInterface $listener)
     {
-        $this->eventManager->trigger(new ParseEvent(ParseEvent::EVENT_BEGIN,  $this->configCollection));
-        
-        /* @var $class ClassScanner */
-        foreach ($this->classes as $class) {
-            $this->parseClass($class);
-        }
-        $this->eventManager->trigger(new ParseEvent(ParseEvent::EVENT_FINISH,  $this->configCollection));
-        return $this->configCollection->getConfig();
+        $this->eventManager->attachAggregate($listener);
     }
 
     /**
+     * 
+     * @param ClassScanner[] $classes
+     */
+    public function parse($classes)
+    {
+        $config = array();
+        foreach ($classes as $class) {
+            $classAnnotationHolder = $this->parseClass($class);
+            $event = new ParseEvent(ParseEvent::EVENT_CLASS_PARSED, $classAnnotationHolder, array('config' => $this->config));
+            $this->eventManager->trigger($event);
+            $config = ArrayUtils::merge($config, $event->getResult());
+        }
+        return $config;
+    }
+
+    /**
+     * 
      * @param ClassScanner $class
+     * @return ClassAnnotationHolder
      */
     public function parseClass(ClassScanner $class)
     {
+        $classAnnotationHolder = new ClassAnnotationHolder($class);
+
         $classAnnotations = $class->getAnnotations($this->annotationManager);
         if ($classAnnotations instanceof AnnotationCollection) {
             foreach ($classAnnotations as $annotation) {
-                $this->eventManager->trigger(new ParseEvent(ParseEvent::EVENT_CLASS_ANNOTATION,  $annotation, array(
-                    'class' => $class,
-                    'configs' => $this->configCollection
-                )));
+                $classAnnotationHolder->addAnnotation($annotation);
             }
         } else {
             $classAnnotations = new AnnotationCollection(array());
         }
-        
+
         foreach ($class->getMethods() as $method) {
             // zf can't process abstract methods for now, wrap with "try" block
+            $methodAnnotationHolder = new MethodAnnotationHolder($method);
             try {
                 $methodAnnotations = $method->getAnnotations($this->annotationManager);
                 if ($methodAnnotations instanceof AnnotationCollection) {
                     foreach ($methodAnnotations as $annotation) {
-                        $this->eventManager->trigger(new ParseEvent(ParseEvent::EVENT_METHOD_ANNOTATION,  $annotation, array(
-                            'class' => $class,
-                            'method' => $method,
-                            'class_annotations' => $classAnnotations,
-                            'configs' => $this->configCollection
-                        )));
+                        $methodAnnotationHolder->addAnnotation($annotation);
                     }
                 }
-            } catch (Exception $skip) {}
+                $classAnnotationHolder->addMethod($methodAnnotationHolder);
+            } catch (Exception $skip) {
+                
+            }
         }
+
+        return $classAnnotationHolder;
     }
+
 }

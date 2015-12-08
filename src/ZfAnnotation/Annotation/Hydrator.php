@@ -10,7 +10,6 @@
 namespace ZfAnnotation\Annotation;
 
 /**
- * A controller annotation.
  * @Annotation
  */
 class Hydrator extends Service
@@ -18,5 +17,5 @@ class Hydrator extends Service
     /**
      * @var string
      */
-    public $serviceManagerKey = 'hydrators';
+    public $serviceManager = 'hydrators';
 }

@@ -10,7 +10,6 @@
 namespace ZfAnnotation\Annotation;
 
 /**
- * A controller annotation.
  * @Annotation
  */
 class RoutePlugin extends Service
@@ -18,5 +17,5 @@ class RoutePlugin extends Service
     /**
      * @var string
      */
-    public $serviceManagerKey = 'route_manager';
+    public $serviceManager = 'route_manager';
 }

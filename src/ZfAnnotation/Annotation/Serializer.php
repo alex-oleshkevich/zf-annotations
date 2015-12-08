@@ -10,7 +10,6 @@
 namespace ZfAnnotation\Annotation;
 
 /**
- * A controller annotation.
  * @Annotation
  */
 class Serializer extends Service
@@ -18,5 +17,5 @@ class Serializer extends Service
     /**
      * @var string
      */
-    public $serviceManagerKey = 'serializers';
+    public $serviceManager = 'serializers';
 }

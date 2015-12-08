@@ -2,19 +2,30 @@
 
 namespace ZfAnnotationTest\Route;
 
-use ZfAnnotationTest\AbstractAnnotationTestCase;
+use ZfAnnotation\EventListener\RouteListener;
+use ZfAnnotationTest\AnnotationTestCase;
 
 /**
  * @group resolve
  */
-class ParserResolvesControllerTest extends AbstractAnnotationTestCase
+class ParserResolvesControllerTest extends AnnotationTestCase
 {
+
+    protected function setUp()
+    {
+        $this->listener = new RouteListener;
+    }
 
     public function testIndexRouteCorrected()
     {
-        $config = $this->parse('ZfAnnotationTest\Route\TestController\DefinedController')['router']['routes'];
-
-        /* @var $route Route */
+        $controllerConfig = array(
+            'controllers' => array(
+                'invokables' => array(
+                    'AliasedController' => 'ZfAnnotationTest\Route\TestController\DefinedController'
+                )
+            )
+        );
+        $config = $this->parse('ZfAnnotationTest\Route\TestController\DefinedController', $controllerConfig)['router']['routes'];
         $route = current($config);
 
         $expected = array(

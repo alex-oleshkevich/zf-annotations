@@ -2,15 +2,16 @@
 
 namespace ZfAnnotationTest\Route;
 
-use Zend\Code\Reflection\ClassReflection;
-use ZfAnnotation\Annotation\Route;
-use ZfAnnotation\Parser\ControllerAnnotationParser;
-use ZfAnnotation\Service\RouteConfigBuilder;
-use ZfAnnotationTest\AbstractAnnotationTestCase;
-use ZfAnnotationTest\Route\TestController\NoBaseController;
+use ZfAnnotation\EventListener\RouteListener;
+use ZfAnnotationTest\AnnotationTestCase;
 
-class SimpleRouteAnnotationTest extends AbstractAnnotationTestCase
+class SimpleRouteAnnotationTest extends AnnotationTestCase
 {
+
+    protected function setUp()
+    {
+        $this->listener = new RouteListener;
+    }
 
     /**
      * @group test
@@ -18,8 +19,6 @@ class SimpleRouteAnnotationTest extends AbstractAnnotationTestCase
     public function testAllParamsSetAndAccessible()
     {
         $config = $this->parse('ZfAnnotationTest\Route\TestController\NoBaseController')['router']['routes'];
-
-        /* @var $route Route */
         $route = current($config);
 
         $expected = array(
@@ -70,7 +69,7 @@ class SimpleRouteAnnotationTest extends AbstractAnnotationTestCase
     {
         $config = $this->parse('ZfAnnotationTest\Route\TestController\NoBaseController')['router']['routes'];
         $this->assertArrayHasKey('no-route', $config);
-        
+
         $routeArray = array(
             'type' => 'literal',
             'priority' => 0,

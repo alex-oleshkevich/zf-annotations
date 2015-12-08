@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Annotation module for Zend Framework 2
  *
@@ -9,59 +10,49 @@
 
 namespace ZfAnnotation\Service;
 
-use Exception;
-use Zend\Code\Annotation\AnnotationManager;
-use Zend\Code\Annotation\Parser\DoctrineAnnotationParser;
-use Zend\Code\Scanner\DirectoryScanner;
 use Zend\EventManager\EventManager;
+use Zend\EventManager\EventManagerInterface;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\ServiceManager\ServiceManager;
-use ZfAnnotation\Config\Collection;
-use ZfAnnotation\Event\ParseEvent;
 use ZfAnnotation\Parser\ClassParser;
-use ZfAnnotation\Parser\ControllerParser;
 
 /**
  * Creates a class parser.
  */
 class ClassParserFactory implements FactoryInterface
 {
+
     /**
      * @param ServiceLocatorInterface $serviceLocator
-     * @return ControllerParser
+     * @return ClassParser
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        return self::factory($serviceLocator->get('Config'), $serviceLocator);
+        /* @var $eventManager EventManager */
+        $eventManager = $serviceLocator->get('EventManager');
+        $annotationManager = $serviceLocator->get('ZfAnnotation\AnnotationManager');
+        $config = $serviceLocator->get('Config');
+
+        $parser = new ClassParser($annotationManager, $eventManager);
+        foreach ($config['zf_annotation']['event_listeners'] as $listener) {
+            $parser->attach($serviceLocator->get($listener));
+        }
+        return $parser;
     }
     
     /**
+     * 
      * @param array $config
-     * @param ServiceManager $serviceManager
+     * @param EventManagerInterface $eventManager
      * @return ClassParser
      */
-    public static function factory(array $config, ServiceManager $serviceManager)
+    public static function factory(array $config, EventManagerInterface $eventManager) 
     {
-        $annotationManager = new AnnotationManager;
-        $parser = new DoctrineAnnotationParser;
-        $parser->registerAnnotations($config['zf_annotation']['annotations']);
-        $annotationManager->attach($parser);
-        
-        /* @var $eventManager EventManager */
-        $eventManager = $serviceManager->get('EventManager');
+        $parser = new ClassParser($config, AnnotationManagerFactory::factory($config['zf_annotation']['annotations']), $eventManager);
         foreach ($config['zf_annotation']['event_listeners'] as $listener) {
-            $listenerInstance = new $listener; 
-            $eventManager->attach(ParseEvent::EVENT_BEGIN, array($listenerInstance, 'onParseBegin'), $listenerInstance->getPriority());
-            $eventManager->attach(ParseEvent::EVENT_CLASS_ANNOTATION, array($listenerInstance, 'onClassAnnotationParsed'), $listenerInstance->getPriority());
-            $eventManager->attach(ParseEvent::EVENT_METHOD_ANNOTATION, array($listenerInstance, 'onMethodAnnotationParsed'), $listenerInstance->getPriority());
-            $eventManager->attach(ParseEvent::EVENT_FINISH, array($listenerInstance, 'onParseFinish'));
+            $parser->attach(new $listener);
         }
-        
-        if (empty($config['zf_annotation']['directories'])) {
-            throw new Exception('No scan directories configured. See zf_annotation.directories[] config property or refer the documentation.');
-        }
-        $directoryScanner = new DirectoryScanner($config['zf_annotation']['directories']);
-        return new ClassParser($directoryScanner->getClasses(), $annotationManager, $eventManager, new Collection($config));
+        return $parser;
     }
+
 }

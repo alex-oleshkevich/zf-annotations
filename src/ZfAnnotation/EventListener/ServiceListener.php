@@ -4,13 +4,19 @@ namespace ZfAnnotation\EventListener;
 
 use Exception;
 use Zend\Code\Scanner\ClassScanner;
+use Zend\EventManager\AbstractListenerAggregate;
+use Zend\EventManager\EventManagerInterface;
+use Zend\ServiceManager\AbstractFactoryInterface;
+use Zend\ServiceManager\DelegatorFactoryInterface;
+use Zend\ServiceManager\FactoryInterface;
+use Zend\ServiceManager\InitializerInterface;
 use ZfAnnotation\Annotation\Service;
 use ZfAnnotation\Event\ParseEvent;
-use ZfAnnotation\EventListener\ListenerInterface;
+use ZfAnnotation\Exception\InvalidAnnotationException;
+use ZfAnnotation\Exception\InvalidArgumentException;
 
-class ServiceListener implements ListenerInterface
+class ServiceListener extends AbstractListenerAggregate
 {
-    const PRIORITY = 1;
 
     /**
      * @var array
@@ -18,72 +24,85 @@ class ServiceListener implements ListenerInterface
     protected $definitions = array();
 
     /**
-     * @param ParseEvent $event
+     * @param EventManagerInterface $events
      */
-    public function onParseBegin(ParseEvent $event)
+    public function attach(EventManagerInterface $events)
     {
-
+        $this->listeners[] = $events->attach(ParseEvent::EVENT_CLASS_PARSED, [$this, 'onClassParsed']);
     }
 
     /**
      * @param ParseEvent $event
      */
-    public function onClassAnnotationParsed(ParseEvent $event)
+    public function onClassParsed(ParseEvent $event)
     {
-        /* @var $annotation Service */
-        $annotation = $event->getTarget();
+        $classHolder = $event->getTarget();
+        $classAnnotations = $classHolder->getAnnotations();
+        foreach ($classAnnotations as $annotation) {
+            if (!$annotation instanceof Service) {
+                continue;
+            }
 
-        /* @var $class ClassScanner */
-        $class = $event->getParam('class');
-
-        if (!$annotation instanceof Service) {
-            return false;
+            $this->handleClassAnnotation($annotation, $classHolder->getClass());
         }
+        $event->mergeResult($this->definitions);
+    }
 
+    public function handleClassAnnotation(Service $annotation, ClassScanner $class)
+    {
         if (!$annotation->getName()) {
             $annotation->setName($class->getName());
         }
 
         switch ($annotation->getType()) {
             case 'invokable':
-                $this->definitions[$annotation->getServiceManagerKey()]['invokables'][$annotation->getName()] = $class->getName();
+                $this->definitions[$annotation->getServiceManager()]['invokables'][$annotation->getName()] = $class->getName();
                 break;
             case 'factory':
-                $this->definitions[$annotation->getServiceManagerKey()]['factories'][$annotation->getName()] = $class->getName();
+                if (!in_array(FactoryInterface::class, $class->getInterfaces())) {
+                    throw new InvalidAnnotationException('Service factory class must implement "' . FactoryInterface::class . '".');
+                }
+                $this->definitions[$annotation->getServiceManager()]['factories'][$annotation->getName()] = $class->getName();
+                break;
+            case 'abstractFactory':
+                if (!in_array(AbstractFactoryInterface::class, $class->getInterfaces())) {
+                    throw new InvalidAnnotationException('Abstract service factory class must implement "' . AbstractFactoryInterface::class . '".');
+                }
+                $this->definitions[$annotation->getServiceManager()]['abstract_factories'][] = $class->getName();
+                break;
+            case 'initializer':
+                if (!in_array(InitializerInterface::class, $class->getInterfaces())) {
+                    throw new InvalidAnnotationException('Initializer must implement "' . InitializerInterface::class . '".');
+                }
+                $this->definitions[$annotation->getServiceManager()]['initializers'][] = $class->getName();
+                break;
+            case 'delegator':
+                if (!in_array(DelegatorFactoryInterface::class, $class->getInterfaces())) {
+                    throw new InvalidAnnotationException('Delegator must implement "' . DelegatorFactoryInterface::class . '".');
+                }
+                if (empty($annotation->getFor())) {
+                    throw new InvalidAnnotationException('Delegator annotation must contain "for" option.');
+                }
+                if (!isset($this->definitions[$annotation->getServiceManager()]['delegators'][$annotation->getFor()])) {
+                    $this->definitions[$annotation->getServiceManager()]['delegators'][$annotation->getFor()] = array();
+                }
+                $this->definitions[$annotation->getServiceManager()]['delegators'][$annotation->getFor()][] = $class->getName();
                 break;
             default:
-                throw new Exception('[Annotation] AbstractService annotation must have "type" property value. Seen in ' . $class->getName());
+                throw new InvalidAnnotationException('Service annotation must have "type" property value. Seen in ' . $class->getName());
         }
 
-        if (is_bool($annotation->getShared())) {
-            $this->definitions[$annotation->getServiceManagerKey()]['shared'][$annotation->getName()] = $annotation->isShared();
-        }
-
-        if ($annotation->hasAliases()) {
+        $allowedToShareAndAlias = array('invokable', 'factory');
+        if (in_array($annotation->getType(), $allowedToShareAndAlias)) {
+            if (is_bool($annotation->getShared())) {
+                $this->definitions[$annotation->getServiceManager()]['shared'][$annotation->getName()] = $annotation->getShared();
+            }
+            
             foreach ($annotation->getAliases() as $alias) {
-                $this->definitions[$annotation->getServiceManagerKey()]['aliases'][$alias] = $annotation->getName();
+                $this->definitions[$annotation->getServiceManager()]['aliases'][$alias] = $annotation->getName();
             }
         }
-    }
-
-    /**
-     * @param ParseEvent $event
-     */
-    public function onMethodAnnotationParsed(ParseEvent $event)
-    {
 
     }
 
-    /**
-     * @param ParseEvent $event
-     */
-    public function onParseFinish(ParseEvent $event)
-    {
-        $event->getTarget()->merge($this->definitions);
-    }
-
-    public function getPriority()
-    {
-        return self::PRIORITY;
-    }
 }

@@ -10,7 +10,6 @@
 namespace ZfAnnotation\Annotation;
 
 /**
- * A controller annotation.
  * @Annotation
  */
 class InputFilter extends Service
@@ -18,5 +17,5 @@ class InputFilter extends Service
     /**
      * @var string
      */
-    public $serviceManagerKey = 'input_filters';
+    public $serviceManager = 'input_filters';
 }

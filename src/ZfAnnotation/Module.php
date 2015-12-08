@@ -11,13 +11,14 @@
 namespace ZfAnnotation;
 
 use Exception;
+use ReflectionClass;
 use Traversable;
+use Zend\Code\Scanner\DirectoryScanner;
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\ModuleManager\Feature\InitProviderInterface;
 use Zend\ModuleManager\ModuleEvent;
 use Zend\ModuleManager\ModuleManagerInterface;
-use Zend\ServiceManager\ServiceManager;
 use Zend\Stdlib\ArrayUtils;
 use ZfAnnotation\Service\ClassParserFactory;
 
@@ -30,36 +31,34 @@ class Module implements AutoloaderProviderInterface, InitProviderInterface, Conf
     public function init(ModuleManagerInterface $moduleManager)
     {
         $eventManager = $moduleManager->getEventManager();
-        $eventManager->attach(ModuleEvent::EVENT_LOAD_MODULES_POST, array( $this, 'onLoadModules' ), 1000);
+        $eventManager->attach(ModuleEvent::EVENT_MERGE_CONFIG, array($this, 'onMergeConfig'));
     }
 
     /**
      * @param ModuleEvent $event
      * @throws Exception
      */
-    public function onLoadModules(ModuleEvent $event)
+    public function onMergeConfig(ModuleEvent $event)
     {
-        /* @var $serviceManager ServiceManager */
-        $serviceManager = $event->getParam('ServiceManager');
-        $appConfig = $event->getConfigListener()->getMergedConfig(false);
-        $config = array();
-
-        // check if should rescan files on every request
-        if ($appConfig['zf_annotation']['compile_on_request']) {
-            $config = ClassParserFactory::factory($appConfig, $serviceManager)->parse();
-        } else {
-            // if scanner disable check if we have to load config from cache
-            if ($appConfig['zf_annotation']['use_cache']) {
-                // load if file exists
-                if (file_exists($appConfig['zf_annotation']['cache_file'])) {
-                    $config = include $appConfig['zf_annotation']['cache_file'];
-                } else {
-                    throw new Exception('Cache file: ' . $appConfig['zf_annotation']['cache_file'] . 'does not exists.');
-                }
+        // do not parse annotations if config cache is enabled.
+        $config = $event->getConfigListener()->getMergedConfig(false);
+        
+        $parser = ClassParserFactory::factory($config, $event->getTarget()->getEventManager());
+        $modules = $event->getTarget()->getLoadedModules();
+        $modulesAllowedToScan = $config['zf_annotation']['scan_modules'];
+        foreach ($modules as $module) {
+            $modName = array_shift(explode('\\', get_class($module)));
+            if (!empty($modulesAllowedToScan) && !in_array($modName, $modulesAllowedToScan)) {
+                continue;
             }
-        }
 
-        $event->getConfigListener()->setMergedConfig(ArrayUtils::merge($appConfig, $config));
+            $ref = new ReflectionClass($module);
+            $dir = dirname($ref->getFileName());
+
+            $classes = new DirectoryScanner($dir);
+            $parsedConfig = $parser->parse($classes->getClasses());
+        }
+        $event->getConfigListener()->setMergedConfig(ArrayUtils::merge($config, $parsedConfig));
     }
 
     /**

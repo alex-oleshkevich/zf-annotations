@@ -2,13 +2,19 @@
 
 namespace ZfAnnotationTest\Route;
 
-use ZfAnnotationTest\AbstractAnnotationTestCase;
+use ZfAnnotation\EventListener\RouteListener;
+use ZfAnnotationTest\AnnotationTestCase;
 
 /**
  * @group namespaced
  */
-class NamespacedRouteAnnotationTest extends AbstractAnnotationTestCase
+class NamespacedRouteAnnotationTest extends AnnotationTestCase
 {
+
+    protected function setUp()
+    {
+        $this->listener = new RouteListener;
+    }
 
     public function testChildNodesAdded()
     {

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Annotation module for Zend Framework 2
  *
@@ -10,13 +11,11 @@
 namespace ZfAnnotation\Service;
 
 use Zend\Code\Annotation\AnnotationManager;
-use Zend\Code\Annotation\Parser\DoctrineAnnotationParser;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
- * Annotatin manager factory.
- * Registers required annotations.
+ * Annotation manager factory.
  */
 class AnnotationManagerFactory implements FactoryInterface
 {
@@ -27,11 +26,21 @@ class AnnotationManagerFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $annotationManager = new AnnotationManager;
-        $parser = new DoctrineAnnotationParser;
-        $parser->registerAnnotation('ZfAnnotation\Annotation\Route');
-        $annotationManager->attach($parser);
-        return $annotationManager;
+        $manager = new AnnotationManager;
+        $manager->attach($serviceLocator->get('ZfAnnotation\DoctrineAnnotationParser'));
+        return $manager;
+    }
+    
+    /**
+     * 
+     * @param array $annotations
+     * @return AnnotationManager
+     */
+    public static function factory(array $annotations)
+    {
+        $manager = new AnnotationManager;
+        $manager->attach(DoctrineAnnotationParserFactory::factory($annotations));
+        return $manager;
     }
 
 }

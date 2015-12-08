@@ -7,18 +7,16 @@ use Zend\Code\Annotation\AnnotationCollection;
 use Zend\Code\Annotation\AnnotationInterface;
 use Zend\Code\Scanner\ClassScanner;
 use Zend\Code\Scanner\MethodScanner;
+use Zend\EventManager\AbstractListenerAggregate;
+use Zend\EventManager\EventManagerInterface;
 use Zend\Filter\FilterChain;
 use Zend\Stdlib\ArrayUtils;
 use ZfAnnotation\Annotation\Route;
-use ZfAnnotation\Config\Collection;
-use ZfAnnotation\EventListener\ListenerInterface;
 use ZfAnnotation\Event\ParseEvent;
 use ZfAnnotation\Exception\InvalidArgumentException;
 
-class RouteListener implements ListenerInterface
+class RouteListener extends AbstractListenerAggregate
 {
-    const PRIORITY = 2;
-
     /**
      * @var array
      */
@@ -29,12 +27,64 @@ class RouteListener implements ListenerInterface
      */
     protected $controllerCache = array();
 
-    public function onParseBegin(ParseEvent $event)
+    /**
+     * @param EventManagerInterface $events
+     */
+    public function attach(EventManagerInterface $events)
     {
-        /* @var $configCollection Collection */
-        $configCollection = $event->getTarget();
-        $controllers = $configCollection->getFromBase('controllers', array());
+        $this->listeners[] = $events->attach(ParseEvent::EVENT_CLASS_PARSED, [$this, 'onClassParsed']);
+    }
 
+    /**
+     * @param ParseEvent $event
+     */
+    public function onClassParsed(ParseEvent $event)
+    {
+        $this->cacheControllers($event->getParam('config'));
+        
+        // handle class annotations
+        $classHolder = $event->getTarget();
+        $classAnnotationsCollection = $classHolder->getAnnotations();
+        $classAnnotations = new AnnotationCollection;
+        foreach ($classAnnotationsCollection as $annotation) {
+            if (!$annotation instanceof Route) {
+                continue;
+            }
+            
+            $classAnnotations->append($annotation);
+            $this->handleClassAnnotation($annotation, $classHolder->getClass());
+        }
+        
+        // handle annotations per method
+        foreach ($classHolder->getMethods() as $methodHolder) {
+            foreach ($methodHolder->getAnnotations() as $methodAnnotation) {
+                if (!$methodAnnotation instanceof Route) {
+                    continue;
+                }
+
+                $this->handleMethodAnnotation($methodAnnotation, $classAnnotations, $classHolder->getClass(), $methodHolder->getMethod());
+            }
+        }
+        
+        $event->mergeResult(array(
+            'router' => array(
+                'routes' => $this->config
+            )
+        ));
+    }
+    
+    /**
+     * 
+     * @param array $config
+     * @return void
+     */
+    public function cacheControllers(array $config)
+    {
+        if (!empty($this->controllerCache)) {
+            return;
+        }
+        
+        $controllers = isset($config['controllers']) ? $config['controllers'] : array();
         $controllers['invokables'] = isset($controllers['invokables']) ? $controllers['invokables'] : array();
         $controllers['factories'] = isset($controllers['factories']) ? $controllers['factories'] : array();
 
@@ -43,77 +93,55 @@ class RouteListener implements ListenerInterface
     }
 
     /**
-     * @param ParseEvent $event
+     * 
+     * @param Route $annotation
+     * @param ClassScanner $class
+     * @throws InvalidArgumentException
      */
-    public function onClassAnnotationParsed(ParseEvent $event)
+    public function handleClassAnnotation(Route $annotation, ClassScanner $class)
     {
-        $annotation = $event->getTarget();
-        $class = $event->getParam('class');
-        if ($annotation instanceof Route) {
-            if (!$this->isValidForRootNode($annotation)) {
-                throw new InvalidArgumentException('"route" and "name" properties are required for class-level Route annotation.');
-            }
-
-            $config = $this->annotationToRouteConfig($annotation, $class);
-            $this->config = ArrayUtils::merge($this->config, $config);
+        if (!$this->isValidForRootNode($annotation)) {
+            throw new InvalidArgumentException('"route" and "name" properties are required for class-level @Route annotation.');
         }
+
+        $config = $this->annotationToRouteConfig($annotation, $class);
+        $this->config = ArrayUtils::merge($this->config, $config);
     }
 
     /**
-     * @param ParseEvent $event
+     * 
+     * @param Route $annotation
+     * @param ClassScanner $class
+     * @param MethodScanner $method
+     * @throws InvalidArgumentException
      */
-    public function onMethodAnnotationParsed(ParseEvent $event)
+    public function handleMethodAnnotation(Route $annotation, AnnotationCollection $classAnnotations, ClassScanner $class, MethodScanner $method)
     {
-        /* @var $annotation Route */
-        $annotation = $event->getTarget();
+        if (!$this->isValidForChildNode($annotation)) {
+            throw new InvalidArgumentException(
+            'Method-level route annotation cannot extend another one (not implemented). '
+            . 'Seen in route "' . $annotation->name . '", '
+            . 'route: "' . $annotation->route . '", '
+            . 'tried to extend: "' . $annotation->extends . '"'
+            );
+        }
 
-        /* @var $class ClassScanner */
-        $class = $event->getParam('class');
-
-        /* @var $method MethodScanner */
-        $method = $event->getParam('method');
-
-        /* @var $classAnnotations AnnotationCollection */
-        $classAnnotations = $event->getParam('class_annotations');
-
-        if ($annotation instanceof Route) {
-            if (!$this->isValidForChildNode($annotation)) {
-                throw new InvalidArgumentException(
-                'Method-level route annotation cannot extend another one (not implemented). '
-                . 'Seen in route "' . $annotation->name . '", '
-                . 'route: "' . $annotation->route . '", '
-                . 'tried to extend: "' . $annotation->extends . '"'
-                );
-            }
-
-            $routeConfig = $this->annotationToRouteConfig($annotation, $class, $method);
-            if ($classAnnotations->hasAnnotation('ZfAnnotation\Annotation\Route')) {
-                foreach ($classAnnotations as $classAnnotation) {
-                    if ($classAnnotation instanceof Route) {
-                        $path = trim($classAnnotation->getExtends() . '/' . $classAnnotation->getName(), '/');
-                        $reference = &$this->getReferenceForPath(explode('/', $path), $this->config);
-                        $reference = array_replace_recursive($reference, $routeConfig);
+        $routeConfig = $this->annotationToRouteConfig($annotation, $class, $method);
+        if (count($classAnnotations) > 0) {
+            foreach ($classAnnotations as $classAnnotation) {
+                $path = trim($classAnnotation->getExtends() . '/' . $classAnnotation->getName(), '/');
+                $reference = &$this->getReferenceForPath(explode('/', $path), $this->config);
+                $reference = ArrayUtils::merge($reference, $routeConfig);
+                
+                if (trim($classAnnotation->getRoute()) == '/') {
+                    foreach ($reference as &$reference) {
+                        $reference['options']['route'] = ltrim($reference['options']['route'], '/');
                     }
                 }
-            } else {
-                $this->config = array_replace_recursive($this->config, $routeConfig);
             }
+        } else {
+            $this->config = ArrayUtils::merge($this->config, $routeConfig);
         }
-    }
-
-    /**
-     * @param ParseEvent $event
-     */
-    public function onParseFinish(ParseEvent $event)
-    {
-        $event->getTarget()->set('router', array(
-            'routes' => $this->config
-        ));
-    }
-
-    public function getPriority()
-    {
-        return self::PRIORITY;
     }
 
     /**
@@ -152,7 +180,11 @@ class RouteListener implements ListenerInterface
         }
 
         if (!$annotation->hasType()) {
-            $annotation->setType('literal');
+            if (preg_match('/:[\w\d]+/', $annotation->getRoute())) {
+                $annotation->setType('segment');
+            } else {
+                $annotation->setType('literal');
+            }
         }
 
         if (!$annotation->hasDefaultController()) {
@@ -172,6 +204,11 @@ class RouteListener implements ListenerInterface
         return $annotation;
     }
 
+    /**
+     * 
+     * @param string $class
+     * @return string
+     */
     protected function &getReferencedController($class)
     {
         $this->controllerCache[] = $class;
@@ -274,16 +311,6 @@ class RouteListener implements ListenerInterface
     public function isValidForChildNode(Route $annotation)
     {
         return (bool) $annotation->extends == false;
-    }
-
-    /**
-     * @return array
-     */
-    public function getConfig()
-    {
-        return array(
-            'routes' => $this->config
-        );
     }
 
 }

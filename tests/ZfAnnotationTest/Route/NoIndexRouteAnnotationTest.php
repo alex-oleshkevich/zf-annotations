@@ -2,13 +2,20 @@
 
 namespace ZfAnnotationTest\Route;
 
-use ZfAnnotationTest\AbstractAnnotationTestCase;
+use ZfAnnotation\EventListener\RouteListener;
+use ZfAnnotationTest\AnnotationTestCase;
 
 /**
  * @group no-index
  */
-class NoIndexRouteAnnotationTest extends AbstractAnnotationTestCase
+class NoIndexRouteAnnotationTest extends AnnotationTestCase
 {
+
+    protected function setUp()
+    {
+        $this->listener = new RouteListener;
+    }
+
     public function testIndexRouteCorrected()
     {
         $config = $this->parse('ZfAnnotationTest\Route\TestController\NoIndexRouteController')['router']['routes'];

@@ -10,7 +10,6 @@
 namespace ZfAnnotation\Annotation;
 
 /**
- * A controller annotation.
  * @Annotation
  */
 class FormElement extends Service
@@ -18,5 +17,5 @@ class FormElement extends Service
     /**
      * @var string
      */
-    public $serviceManagerKey = 'form_elements';
+    public $serviceManager = 'form_elements';
 }

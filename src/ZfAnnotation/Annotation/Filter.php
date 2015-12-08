@@ -3,7 +3,6 @@
 namespace ZfAnnotation\Annotation;
 
 /**
- * A controller annotation.
  * @Annotation
  */
 class Filter extends Service
@@ -11,5 +10,5 @@ class Filter extends Service
     /**
      * @var string
      */
-    public $serviceManagerKey = 'filters';
+    public $serviceManager = 'filters';
 }

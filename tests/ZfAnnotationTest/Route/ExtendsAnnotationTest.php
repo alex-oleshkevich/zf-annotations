@@ -2,14 +2,19 @@
 
 namespace ZfAnnotationTest\Route;
 
-use ZfAnnotationTest\AbstractAnnotationTestCase;
+use ZfAnnotation\EventListener\RouteListener;
+use ZfAnnotationTest\AnnotationTestCase;
 
 /**
  * @group extends
  */
-class ExtendsAnnotationTest extends AbstractAnnotationTestCase
+class ExtendsAnnotationTest extends AnnotationTestCase
 {
-
+    protected function setUp()
+    {
+        $this->listener = new RouteListener;
+    }
+    
     public function testIndexRouteCorrected()
     {
         $routeConfig = array(
@@ -30,8 +35,8 @@ class ExtendsAnnotationTest extends AbstractAnnotationTestCase
                 )
             )
         );
+        
         $config = array_replace_recursive($this->parse('ZfAnnotationTest\Route\TestController\ExtendsController')['router']['routes'], $routeConfig);
-
 
         $expected = array(
             'default' => array(

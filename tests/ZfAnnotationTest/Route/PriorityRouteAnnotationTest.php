@@ -2,13 +2,19 @@
 
 namespace ZfAnnotationTest\Route;
 
-use ZfAnnotationTest\AbstractAnnotationTestCase;
+use ZfAnnotation\EventListener\RouteListener;
+use ZfAnnotationTest\AnnotationTestCase;
 
 /**
- * @group namespaced
+ * @group priority
  */
-class PriorityRouteAnnotationTest extends AbstractAnnotationTestCase
+class PriorityRouteAnnotationTest extends AnnotationTestCase
 {
+
+    protected function setUp()
+    {
+        $this->listener = new RouteListener;
+    }
 
     public function testPriorityAdded()
     {

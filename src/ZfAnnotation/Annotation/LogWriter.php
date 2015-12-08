@@ -10,7 +10,6 @@
 namespace ZfAnnotation\Annotation;
 
 /**
- * A controller annotation.
  * @Annotation
  */
 class LogWriter extends Service
@@ -18,5 +17,5 @@ class LogWriter extends Service
     /**
      * @var string
      */
-    public $serviceManagerKey = 'log_writers';
+    public $serviceManager = 'log_writers';
 }
