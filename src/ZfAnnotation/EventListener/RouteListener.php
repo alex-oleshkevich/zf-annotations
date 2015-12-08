@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Annotation module for Zend Framework 2.
+ *
+ * @link      https://github.com/alex-oleshkevich/zf-annotations the canonical source repository.
+ * @copyright Copyright (c) 2014-2016 Alex Oleshkevich <alex.oleshkevich@gmail.com>
+ * @license   http://en.wikipedia.org/wiki/MIT_License MIT
+ */
+
 namespace ZfAnnotation\EventListener;
 
 use Exception;
@@ -15,8 +23,12 @@ use ZfAnnotation\Annotation\Route;
 use ZfAnnotation\Event\ParseEvent;
 use ZfAnnotation\Exception\InvalidArgumentException;
 
+/**
+ * Collects route annotations.
+ */
 class RouteListener extends AbstractListenerAggregate
 {
+
     /**
      * @var array
      */
@@ -41,7 +53,7 @@ class RouteListener extends AbstractListenerAggregate
     public function onClassParsed(ParseEvent $event)
     {
         $this->cacheControllers($event->getParam('config'));
-        
+
         // handle class annotations
         $classHolder = $event->getTarget();
         $classAnnotationsCollection = $classHolder->getAnnotations();
@@ -50,11 +62,11 @@ class RouteListener extends AbstractListenerAggregate
             if (!$annotation instanceof Route) {
                 continue;
             }
-            
+
             $classAnnotations->append($annotation);
             $this->handleClassAnnotation($annotation, $classHolder->getClass());
         }
-        
+
         // handle annotations per method
         foreach ($classHolder->getMethods() as $methodHolder) {
             foreach ($methodHolder->getAnnotations() as $methodAnnotation) {
@@ -65,14 +77,14 @@ class RouteListener extends AbstractListenerAggregate
                 $this->handleMethodAnnotation($methodAnnotation, $classAnnotations, $classHolder->getClass(), $methodHolder->getMethod());
             }
         }
-        
+
         $event->mergeResult(array(
             'router' => array(
                 'routes' => $this->config
             )
         ));
     }
-    
+
     /**
      * 
      * @param array $config
@@ -83,7 +95,7 @@ class RouteListener extends AbstractListenerAggregate
         if (!empty($this->controllerCache)) {
             return;
         }
-        
+
         $controllers = isset($config['controllers']) ? $config['controllers'] : array();
         $controllers['invokables'] = isset($controllers['invokables']) ? $controllers['invokables'] : array();
         $controllers['factories'] = isset($controllers['factories']) ? $controllers['factories'] : array();
@@ -132,7 +144,7 @@ class RouteListener extends AbstractListenerAggregate
                 $path = trim($classAnnotation->getExtends() . '/' . $classAnnotation->getName(), '/');
                 $reference = &$this->getReferenceForPath(explode('/', $path), $this->config);
                 $reference = ArrayUtils::merge($reference, $routeConfig);
-                
+
                 if (trim($classAnnotation->getRoute()) == '/') {
                     foreach ($reference as &$reference) {
                         $reference['options']['route'] = ltrim($reference['options']['route'], '/');

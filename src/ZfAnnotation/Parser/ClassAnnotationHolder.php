@@ -1,30 +1,43 @@
 <?php
+
+/**
+ * Annotation module for Zend Framework 2.
+ *
+ * @link      https://github.com/alex-oleshkevich/zf-annotations the canonical source repository.
+ * @copyright Copyright (c) 2014-2016 Alex Oleshkevich <alex.oleshkevich@gmail.com>
+ * @license   http://en.wikipedia.org/wiki/MIT_License MIT
+ */
+
 namespace ZfAnnotation\Parser;
 
 use Zend\Code\Annotation\AnnotationCollection;
 use Zend\Code\Annotation\AnnotationInterface;
 use Zend\Code\Scanner\ClassScanner;
 
+/**
+ * Contains class definition and its annotations.
+ */
 class ClassAnnotationHolder
 {
+
     /**
      *
      * @var ClassScanner
      */
     protected $class;
-    
+
     /**
      *
      * @var AnnotationCollection
      */
     protected $annotations;
-    
+
     /**
      *
      * @var MethodAnnotationHolder[]
      */
     protected $methods = array();
-    
+
     /**
      * 
      * @param ClassScanner $class
@@ -34,7 +47,7 @@ class ClassAnnotationHolder
         $this->class = $class;
         $this->annotations = new AnnotationCollection;
     }
-    
+
     /**
      * 
      * @return ClassScanner
@@ -43,7 +56,7 @@ class ClassAnnotationHolder
     {
         return $this->class;
     }
-    
+
     /**
      * 
      * @param AnnotationInterface $annotation
@@ -52,7 +65,7 @@ class ClassAnnotationHolder
     {
         $this->annotations->append($annotation);
     }
-    
+
     /**
      * 
      * @return AnnotationCollection
@@ -61,7 +74,7 @@ class ClassAnnotationHolder
     {
         return $this->annotations;
     }
-    
+
     /**
      * 
      * @param MethodAnnotationHolder $methodHolder
@@ -70,7 +83,7 @@ class ClassAnnotationHolder
     {
         $this->methods[] = $methodHolder;
     }
-    
+
     /**
      * 
      * @return MethodAnnotationHolder[]
@@ -79,4 +92,5 @@ class ClassAnnotationHolder
     {
         return $this->methods;
     }
+
 }

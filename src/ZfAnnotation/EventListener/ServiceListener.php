@@ -1,8 +1,15 @@
 <?php
 
+/**
+ * Annotation module for Zend Framework 2.
+ *
+ * @link      https://github.com/alex-oleshkevich/zf-annotations the canonical source repository.
+ * @copyright Copyright (c) 2014-2016 Alex Oleshkevich <alex.oleshkevich@gmail.com>
+ * @license   http://en.wikipedia.org/wiki/MIT_License MIT
+ */
+
 namespace ZfAnnotation\EventListener;
 
-use Exception;
 use Zend\Code\Scanner\ClassScanner;
 use Zend\EventManager\AbstractListenerAggregate;
 use Zend\EventManager\EventManagerInterface;
@@ -13,8 +20,10 @@ use Zend\ServiceManager\InitializerInterface;
 use ZfAnnotation\Annotation\Service;
 use ZfAnnotation\Event\ParseEvent;
 use ZfAnnotation\Exception\InvalidAnnotationException;
-use ZfAnnotation\Exception\InvalidArgumentException;
 
+/**
+ * Collects service manager annotations.
+ */
 class ServiceListener extends AbstractListenerAggregate
 {
 
@@ -97,12 +106,11 @@ class ServiceListener extends AbstractListenerAggregate
             if (is_bool($annotation->getShared())) {
                 $this->definitions[$annotation->getServiceManager()]['shared'][$annotation->getName()] = $annotation->getShared();
             }
-            
+
             foreach ($annotation->getAliases() as $alias) {
                 $this->definitions[$annotation->getServiceManager()]['aliases'][$alias] = $annotation->getName();
             }
         }
-
     }
 
 }

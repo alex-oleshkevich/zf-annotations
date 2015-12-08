@@ -2,7 +2,7 @@
     "name": "alex-oleshkevich/zf-annotations",
     "description": "ZF2 module for annotated configuration.",
     "type": "library",
-    "license": "GPL",
+    "license": "MIT",
     "homepage": "https://github.com/alex-oleshkevich/zf-annotations",
     "authors": [
         {
@@ -13,11 +13,11 @@
     ],
     "require": {
         "php": ">=5.5",
-        "zendframework/zend-code": ">2.2",
-        "zendframework/zend-console": ">2.2",
-        "zendframework/zend-filter": ">2.2",
-        "zendframework/zend-servicemanager": ">2.2",
-        "zendframework/zend-eventmanager": ">2.2",
+        "zendframework/zend-code": ">=2.4",
+        "zendframework/zend-console": ">=2.4",
+        "zendframework/zend-filter": ">=2.4",
+        "zendframework/zend-servicemanager": ">=2.4",
+        "zendframework/zend-eventmanager": ">=2.4",
         "doctrine/common": ">=2.1"
     },
     "autoload": {

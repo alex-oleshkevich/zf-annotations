@@ -1,44 +1,8 @@
-## Annotated Router for Zend Framework 2
+## Route annotations
 
-This module allows usage of annotations in controller's comment blocks to define routes.
-The goal of this project is to get rid of large routes configuration arrays in module configs.
+This component is completely compatible with standard ZF2 router as it generates the same config as defined within module.
 
-This module is completely compatible with standard ZF2 router as it generates the same config as defined within module.
-
-#### Enable it in application.config.php
-```php
-return array(
-    'modules' => array(
-        // other modules
-        'ZfAnnotation'
-    ),
-    // other content
-);
-```
-
-#### Default configuration:
-Default options can be overwritted within your application:
-```php
-array(
-    'annotated_router' => array(
-        // if true, parser will rescan and parse controller on every page request
-        'compile_on_request' => true, 
-        // cache file
-        'cache_file' => 'data/cache/router.cache.php', 
-        // if true and 'compile_on_request' is off, will load config from 'cache_file'
-        'use_cache' => true,  
-    ),
-)
-```
-
-#### Command line usage:
-```bash
-# Compile and dump routes to cache file
-cli router dump           
-
-# Compile and dump all routes including defined in module.config.php
-cli router dump --complete
-```
+### Usage
 
 #### Add annotations namespace
 ```php
