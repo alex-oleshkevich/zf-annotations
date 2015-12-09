@@ -47,7 +47,8 @@ class Module implements AutoloaderProviderInterface, InitProviderInterface, Conf
         $modules = $event->getTarget()->getLoadedModules();
         $modulesAllowedToScan = $config['zf_annotation']['scan_modules'];
         foreach ($modules as $module) {
-            $modName = array_shift(explode('\\', get_class($module)));
+            $parts = explode('\\', get_class($module));
+            $modName = array_shift($parts);
             if (!empty($modulesAllowedToScan) && !in_array($modName, $modulesAllowedToScan)) {
                 continue;
             }
@@ -58,7 +59,7 @@ class Module implements AutoloaderProviderInterface, InitProviderInterface, Conf
             $classes = new DirectoryScanner($dir);
             $parsedConfig = $parser->parse($classes->getClasses());
         }
-        $event->getConfigListener()->setMergedConfig(ArrayUtils::merge($config, $parsedConfig));
+        $event->getConfigListener()->setMergedConfig(array_replace_recursive($parsedConfig, $config));
     }
 
     /**
