@@ -17,12 +17,15 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 class DoctrineAnnotationParserFactory implements FactoryInterface
 {
 
+    /**
+     * 
+     * @param ServiceLocatorInterface $serviceLocator
+     * @return DoctrineAnnotationParser
+     */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         $config = $serviceLocator->get('Config');
-        $parser = new DoctrineAnnotationParser;
-        $parser->registerAnnotations($config['zf_annotation']['annotations']);
-        return $parser;
+        return self::factory($config['zf_annotation']['annotations']);
     }
 
     /**
@@ -30,7 +33,7 @@ class DoctrineAnnotationParserFactory implements FactoryInterface
      * @param array $annotations
      * @return DoctrineAnnotationParser
      */
-    public static function factory(array $annotations)
+    public static function factory(array $annotations = array())
     {
         $parser = new DoctrineAnnotationParser;
         $parser->registerAnnotations($annotations);

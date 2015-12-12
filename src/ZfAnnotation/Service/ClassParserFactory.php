@@ -10,6 +10,7 @@
 
 namespace ZfAnnotation\Service;
 
+use Zend\Code\Annotation\AnnotationManager;
 use Zend\EventManager\EventManager;
 use Zend\EventManager\EventManagerInterface;
 use Zend\ServiceManager\FactoryInterface;
@@ -33,22 +34,21 @@ class ClassParserFactory implements FactoryInterface
         $annotationManager = $serviceLocator->get('ZfAnnotation\AnnotationManager');
         $config = $serviceLocator->get('Config');
 
-        $parser = new ClassParser($annotationManager, $eventManager);
-        foreach ($config['zf_annotation']['event_listeners'] as $listener) {
-            $parser->attach($serviceLocator->get($listener));
-        }
-        return $parser;
+        return self::factory($config, $eventManager, $annotationManager);
     }
-    
+
     /**
      * 
      * @param array $config
      * @param EventManagerInterface $eventManager
      * @return ClassParser
      */
-    public static function factory(array $config, EventManagerInterface $eventManager) 
+    public static function factory(array $config, EventManagerInterface $eventManager, AnnotationManager $annotationManager = null)
     {
-        $parser = new ClassParser($config, AnnotationManagerFactory::factory($config['zf_annotation']['annotations']), $eventManager);
+        if (null === $annotationManager) {
+            $annotationManager = AnnotationManagerFactory::factory($config['zf_annotation']['annotations']);
+        }
+        $parser = new ClassParser($config, $annotationManager, $eventManager);
         foreach ($config['zf_annotation']['event_listeners'] as $listener) {
             $parser->attach(new $listener);
         }

@@ -19,7 +19,6 @@ use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\ModuleManager\Feature\InitProviderInterface;
 use Zend\ModuleManager\ModuleEvent;
 use Zend\ModuleManager\ModuleManagerInterface;
-use Zend\Stdlib\ArrayUtils;
 use ZfAnnotation\Service\ClassParserFactory;
 
 class Module implements AutoloaderProviderInterface, InitProviderInterface, ConfigProviderInterface
