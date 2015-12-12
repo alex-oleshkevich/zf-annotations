@@ -19,7 +19,9 @@ use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\ModuleManager\Feature\InitProviderInterface;
 use Zend\ModuleManager\ModuleEvent;
 use Zend\ModuleManager\ModuleManagerInterface;
+use ZfAnnotation\Service\AnnotationManagerFactory;
 use ZfAnnotation\Service\ClassParserFactory;
+use ZfAnnotation\Service\DoctrineAnnotationParserFactory;
 
 class Module implements AutoloaderProviderInterface, InitProviderInterface, ConfigProviderInterface
 {
@@ -42,7 +44,9 @@ class Module implements AutoloaderProviderInterface, InitProviderInterface, Conf
         // do not parse annotations if config cache is enabled.
         $config = $event->getConfigListener()->getMergedConfig(false);
 
-        $parser = ClassParserFactory::factory($config, $event->getTarget()->getEventManager());
+        $doctrineParser = DoctrineAnnotationParserFactory::factory($config['zf_annotation']['annotations']);
+        $annotationManager = AnnotationManagerFactory::factory($doctrineParser);
+        $parser = ClassParserFactory::factory($config, $event->getTarget()->getEventManager(), $annotationManager);
         $modules = $event->getTarget()->getLoadedModules();
         $modulesAllowedToScan = $config['zf_annotation']['scan_modules'];
         foreach ($modules as $module) {
