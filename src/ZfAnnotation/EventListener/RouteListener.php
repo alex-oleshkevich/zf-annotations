@@ -157,6 +157,14 @@ class RouteListener extends AbstractListenerAggregate
      */
     public function handleMethodAnnotation(Route $annotation, AnnotationCollection $classAnnotations, ClassScanner $class, MethodScanner $method)
     {
+        foreach ($classAnnotations as $classAnnotation) {
+            if ($annotation->getExtends()) {
+                throw new InvalidArgumentException(
+                    'Not possible to define method-level "extends" property when at least one class-level @Route is defined.'
+                );
+            }
+        }
+
         $routeConfig = $this->annotationToRouteConfig($annotation, $class, $method);
         if (count($classAnnotations) > 0) {
             foreach ($classAnnotations as $classAnnotation) {
