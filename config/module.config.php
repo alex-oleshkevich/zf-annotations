@@ -11,11 +11,14 @@ use ZfAnnotation\Annotation\LogWriter;
 use ZfAnnotation\Annotation\Route;
 use ZfAnnotation\Annotation\RoutePlugin;
 use ZfAnnotation\Annotation\Serializer;
-use ZfAnnotation\Annotation\Service;
 use ZfAnnotation\Annotation\Validator;
 use ZfAnnotation\Annotation\ViewHelper;
 use ZfAnnotation\EventListener\RouteListener;
 use ZfAnnotation\EventListener\ServiceListener;
+use ZfAnnotation\Service\AnnotationManagerFactory;
+use ZfAnnotation\Service\ClassParserFactory;
+use ZfAnnotation\Service\DoctrineAnnotationParserFactory;
+use ZfExtra\Controller\Plugin\Service;
 
 /**
  * Annotated Router module for Zend Framework 2
@@ -50,9 +53,9 @@ return array(
     ),
     'service_manager' => array(
         'factories' => array(
-            'ZfAnnotation\DoctrineAnnotationParser' => 'ZfAnnotation\Service\DoctrineAnnotationParserFactory',
-            'ZfAnnotation\AnnotationManager' => 'ZfAnnotation\Service\AnnotationManagerFactory',
-            'ZfAnnotation\Parser' => 'ZfAnnotation\Service\ClassParserFactory',
+            'ZfAnnotation\DoctrineAnnotationParser' => DoctrineAnnotationParserFactory::class,
+            'ZfAnnotation\AnnotationManager' => AnnotationManagerFactory::class,
+            'ZfAnnotation\Parser' => ClassParserFactory::class,
         )
     ),
 );

@@ -70,10 +70,20 @@ class ClassParser
         $config = array();
         foreach ($classes as $class) {
             $classAnnotationHolder = $this->parseClass($class);
-            $event = new ParseEvent(ParseEvent::EVENT_CLASS_PARSED, $classAnnotationHolder, array('config' => $this->config));
+            $event = new ParseEvent(ParseEvent::EVENT_CLASS_PARSED, $classAnnotationHolder, array(
+                'config' => $this->config,
+                'scannedConfig' => $config
+            ));
             $this->eventManager->trigger($event);
             $config = ArrayUtils::merge($config, $event->getResult());
         }
+        
+        $finalizeEvent = new ParseEvent(ParseEvent::EVENT_FINALIZE, $config, array(
+            'config' => $this->config
+        ));
+        $this->eventManager->trigger($finalizeEvent);
+        $config = $finalizeEvent->getTarget();
+        
         return $config;
     }
 

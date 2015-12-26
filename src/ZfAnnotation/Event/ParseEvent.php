@@ -22,6 +22,7 @@ class ParseEvent extends Event
 {
 
     const EVENT_CLASS_PARSED = 'zfa.class-parsed';
+    const EVENT_FINALIZE = 'zfa.finalize';
 
     /**
      *

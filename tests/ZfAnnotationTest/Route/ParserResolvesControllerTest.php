@@ -25,8 +25,7 @@ class ParserResolvesControllerTest extends AnnotationTestCase
                 )
             )
         );
-        $config = $this->parse('ZfAnnotationTest\Route\TestController\DefinedController', $controllerConfig)['router']['routes'];
-        $route = current($config);
+        $route = $this->parse('ZfAnnotationTest\Route\TestController\DefinedController', $controllerConfig)['router']['routes']['index'];
 
         $expected = array(
             'type' => 'literal',

@@ -49,6 +49,7 @@ class Module implements AutoloaderProviderInterface, InitProviderInterface, Conf
         $parser = ClassParserFactory::factory($config, $event->getTarget()->getEventManager(), $annotationManager);
         $modules = $event->getTarget()->getLoadedModules();
         $modulesAllowedToScan = $config['zf_annotation']['scan_modules'];
+        $classesToParse = array();
         foreach ($modules as $module) {
             $parts = explode('\\', get_class($module));
             $modName = array_shift($parts);
@@ -60,8 +61,9 @@ class Module implements AutoloaderProviderInterface, InitProviderInterface, Conf
             $dir = dirname($ref->getFileName());
 
             $classes = new DirectoryScanner($dir);
-            $parsedConfig = $parser->parse($classes->getClasses());
+            $classesToParse = array_merge($classesToParse, $classes->getClasses());
         }
+        $parsedConfig = $parser->parse($classesToParse);
         $event->getConfigListener()->setMergedConfig(array_replace_recursive($parsedConfig, $config));
     }
 

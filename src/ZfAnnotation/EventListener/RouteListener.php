@@ -33,6 +33,12 @@ class RouteListener extends AbstractListenerAggregate
      * @var array
      */
     protected $config = array();
+    
+    /**
+     *
+     * @var array
+     */
+    protected $scannedConfig = array();
 
     /**
      * @var array
@@ -45,6 +51,7 @@ class RouteListener extends AbstractListenerAggregate
     public function attach(EventManagerInterface $events)
     {
         $this->listeners[] = $events->attach(ParseEvent::EVENT_CLASS_PARSED, [$this, 'onClassParsed']);
+        $this->listeners[] = $events->attach(ParseEvent::EVENT_FINALIZE, [$this, 'onFinalize']);
     }
 
     /**
@@ -52,7 +59,8 @@ class RouteListener extends AbstractListenerAggregate
      */
     public function onClassParsed(ParseEvent $event)
     {
-        $this->cacheControllers($event->getParam('config'));
+        $this->cacheControllers($event->getParam('config'), $event->getParam('scannedConfig'));
+        $this->scannedConfig = $event->getParam('scannedConfig');
 
         // handle class annotations
         $classHolder = $event->getTarget();
@@ -87,21 +95,41 @@ class RouteListener extends AbstractListenerAggregate
 
     /**
      * 
+     * @param ParseEvent $event
+     */
+    public function onFinalize(ParseEvent $event)
+    {
+        $config = $event->getTarget();
+        array_walk_recursive($config, function (&$value, $key) use ($config) {
+            if (is_object($value)) {
+                $value = $value($config);
+            }
+        });
+        $event->setTarget($config);
+    }
+
+    /**
+     * 
      * @param array $config
      * @return void
      */
-    public function cacheControllers(array $config)
+    public function cacheControllers(array $config, array $scannedConfig)
     {
-        if (!empty($this->controllerCache)) {
-            return;
-        }
-
+        $controllers = ArrayUtils::merge($this->extractControllers($config), $this->extractControllers($scannedConfig));
+        $this->controllerCache = array_flip($controllers);
+    }
+    
+    /**
+     * 
+     * @param array $config
+     * @return array
+     */
+    private function extractControllers(array $config)
+    {
         $controllers = isset($config['controllers']) ? $config['controllers'] : array();
         $controllers['invokables'] = isset($controllers['invokables']) ? $controllers['invokables'] : array();
         $controllers['factories'] = isset($controllers['factories']) ? $controllers['factories'] : array();
-
-        $controllers = ArrayUtils::merge($controllers['invokables'], $controllers['factories']);
-        $this->controllerCache = array_flip($controllers);
+        return ArrayUtils::merge($controllers['invokables'], $controllers['factories']);
     }
 
     /**
@@ -200,9 +228,7 @@ class RouteListener extends AbstractListenerAggregate
         }
 
         if (!$annotation->hasDefaultController()) {
-            if (isset($this->controllerCache[$controllerClass])) {
-                $controllerClass = $this->controllerCache[$controllerClass];
-            }
+            $controllerClass = $this->getReferencedController($controllerClass);
             $annotation->setDefaultController($controllerClass);
         }
 
@@ -223,10 +249,22 @@ class RouteListener extends AbstractListenerAggregate
      */
     protected function &getReferencedController($class)
     {
-        $this->controllerCache[] = $class;
-        $index = count($this->controllerCache) - 1;
-        $ref = &$this->controllerCache[$index];
-        return $ref;
+        if (!isset($this->controllerCache[$class])) {
+            $this->controllerCache[$class] = function ($scannedConfig) use ($class) {
+                $controllers = array_flip($this->extractControllers($scannedConfig));
+                if (isset($controllers[$class])) {
+                    return $controllers[$class];
+                } else {
+                    return $class;
+                }
+            };
+        }
+        return $this->controllerCache[$class];
+    }
+    
+    public function getConfig()
+    {
+        return $this->scannedConfig;
     }
 
     /**

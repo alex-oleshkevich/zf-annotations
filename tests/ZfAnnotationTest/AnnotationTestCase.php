@@ -77,9 +77,15 @@ class AnnotationTestCase extends PHPUnit_Framework_TestCase
      */
     protected function handleClassAnnotations(ClassAnnotationHolder $annotations, array $config = array())
     {
-        $event = new ParseEvent(ParseEvent::EVENT_CLASS_PARSED, $annotations, ['config' => $config]);
-        $this->listener->onClassParsed($event);
-        return $event->getResult();
+        $events = new EventManager;
+        $this->listener->attach($events);
+        
+        $event = new ParseEvent(ParseEvent::EVENT_CLASS_PARSED, $annotations, ['config' => $config, 'scannedConfig' => array()]);
+        $events->trigger($event);
+        
+        $finalizeEvent = new ParseEvent(ParseEvent::EVENT_FINALIZE, $event->getResult(), ['config' => $config]);
+        $events->trigger($finalizeEvent);
+        return $finalizeEvent->getTarget();
     }
 
 }

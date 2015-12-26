@@ -18,8 +18,7 @@ class SimpleRouteAnnotationTest extends AnnotationTestCase
      */
     public function testAllParamsSetAndAccessible()
     {
-        $config = $this->parse('ZfAnnotationTest\Route\TestController\NoBaseController')['router']['routes'];
-        $route = current($config);
+        $route = $this->parse('ZfAnnotationTest\Route\TestController\NoBaseController')['router']['routes']['complete-definition'];
 
         $expected = array(
             'type' => 'segment',
