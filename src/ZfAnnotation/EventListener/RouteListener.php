@@ -157,15 +157,6 @@ class RouteListener extends AbstractListenerAggregate
      */
     public function handleMethodAnnotation(Route $annotation, AnnotationCollection $classAnnotations, ClassScanner $class, MethodScanner $method)
     {
-        if (!$this->isValidForChildNode($annotation)) {
-            throw new InvalidArgumentException(
-            'Method-level route annotation cannot extend another one (not implemented). '
-            . 'Seen in route "' . $annotation->name . '", '
-            . 'route: "' . $annotation->route . '", '
-            . 'tried to extend: "' . $annotation->extends . '"'
-            );
-        }
-
         $routeConfig = $this->annotationToRouteConfig($annotation, $class, $method);
         if (count($classAnnotations) > 0) {
             foreach ($classAnnotations as $classAnnotation) {
