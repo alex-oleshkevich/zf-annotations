@@ -48,7 +48,7 @@ class RouteListener extends AbstractListenerAggregate
     /**
      * @param EventManagerInterface $events
      */
-    public function attach(EventManagerInterface $events)
+    public function attach(EventManagerInterface $events, $priority = 1)
     {
         $this->listeners[] = $events->attach(ParseEvent::EVENT_CLASS_PARSED, [$this, 'onClassParsed']);
         $this->listeners[] = $events->attach(ParseEvent::EVENT_FINALIZE, [$this, 'onFinalize']);

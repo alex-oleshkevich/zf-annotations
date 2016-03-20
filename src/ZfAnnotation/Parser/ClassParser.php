@@ -58,7 +58,7 @@ class ClassParser
      */
     public function attach(ListenerAggregateInterface $listener)
     {
-        $this->eventManager->attachAggregate($listener);
+        $listener->attach($this->eventManager);
     }
 
     /**
@@ -74,14 +74,14 @@ class ClassParser
                 'config' => $this->config,
                 'scannedConfig' => $config
             ));
-            $this->eventManager->trigger($event);
+            $this->eventManager->triggerEvent($event);
             $config = ArrayUtils::merge($config, $event->getResult());
         }
         
         $finalizeEvent = new ParseEvent(ParseEvent::EVENT_FINALIZE, $config, array(
             'config' => $this->config
         ));
-        $this->eventManager->trigger($finalizeEvent);
+        $this->eventManager->triggerEvent($finalizeEvent);
         $config = $finalizeEvent->getTarget();
         
         return $config;
