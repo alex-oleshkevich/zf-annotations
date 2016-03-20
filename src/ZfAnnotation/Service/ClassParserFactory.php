@@ -10,6 +10,7 @@
 
 namespace ZfAnnotation\Service;
 
+use Interop\Container\ContainerInterface;
 use Zend\Code\Annotation\AnnotationManager;
 use Zend\EventManager\EventManager;
 use Zend\EventManager\EventManagerInterface;
@@ -29,10 +30,22 @@ class ClassParserFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
+        return $this($serviceLocator, ClassParser::class);
+    }
+    
+    /**
+     * 
+     * @param ContainerInterface $container
+     * @param string $requestedName
+     * @param array $options
+     * @return ClassParser
+     */
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    {
         /* @var $eventManager EventManager */
-        $eventManager = $serviceLocator->get('EventManager');
-        $annotationManager = $serviceLocator->get('ZfAnnotation\AnnotationManager');
-        $config = $serviceLocator->get('Config');
+        $eventManager = $container->get('EventManager');
+        $annotationManager = $container->get('ZfAnnotation\AnnotationManager');
+        $config = $container->get('Config');
 
         return self::factory($config, $eventManager, $annotationManager);
     }

@@ -10,6 +10,7 @@
 
 namespace ZfAnnotation\Service;
 
+use Interop\Container\ContainerInterface;
 use Zend\Code\Annotation\Parser\DoctrineAnnotationParser;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -24,8 +25,20 @@ class DoctrineAnnotationParserFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $config = $serviceLocator->get('Config');
-        return self::factory($config['zf_annotation']['annotations']);
+        return $this($serviceLocator, DoctrineAnnotationParser::class);
+    }
+    
+    /**
+     * 
+     * @param ContainerInterface $container
+     * @param string $requestedName
+     * @param array $options
+     * @return DoctrineAnnotationParser
+     */
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    {
+        $config = $container->get('Config');
+        return self::factory($config['zf_annotation']['annotations']);        
     }
 
     /**
