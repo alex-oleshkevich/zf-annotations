@@ -18,7 +18,7 @@ use ZfAnnotation\EventListener\ServiceListener;
 use ZfAnnotation\Service\AnnotationManagerFactory;
 use ZfAnnotation\Service\ClassParserFactory;
 use ZfAnnotation\Service\DoctrineAnnotationParserFactory;
-use ZfExtra\Controller\Plugin\Service;
+use ZfAnnotation\Annotation\Service;
 
 /**
  * Annotated Router module for Zend Framework 2
