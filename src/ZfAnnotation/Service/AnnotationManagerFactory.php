@@ -52,7 +52,7 @@ class AnnotationManagerFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        return self::factory($serviceLocator->get('ZfAnnotation\DoctrineAnnotationParser'));
+        return self::factory($container->get('ZfAnnotation\DoctrineAnnotationParser'));
     }
 
 }
