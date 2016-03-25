@@ -13,7 +13,7 @@ The goal of this project is to get rid of large configuration arrays in applicat
 
 ### Installation
 
-*NOTE: if you want to use Zend libraries from Zend Framework 2, use ~1.0 versions. Branch ~2.0 supports future versions of Zend Framework and may not compatible with ZF 2.*
+* **NOTE:** if you want to use Zend libraries from Zend Framework 2, use ~1.0 versions. Branch ~2.0 supports future versions of Zend Framework and may not compatible with ZF 2.*
 
 ##### Require via composer
 
