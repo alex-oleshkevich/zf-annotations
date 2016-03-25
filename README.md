@@ -12,6 +12,9 @@ The goal of this project is to get rid of large configuration arrays in applicat
 * PHP >= 5.5.0
 
 ### Installation
+
+NOTE: if you want to use Zend libraries from Zend Framework 2, use 1.* versions. Branch 2.* supports future versions of Zend Framework and may not compatible with ZF 2.  
+
 ##### Require via composer
 
 ```bash
