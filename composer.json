@@ -13,9 +13,9 @@
     ],
     "require": {
         "php": ">=5.5",
-        "zendframework/zend-code": "~2.6",
+        "zendframework/zend-code": "~3.0",
         "zendframework/zend-filter": "~2.5",
-        "zendframework/zend-servicemanager": "~2.6",
+        "zendframework/zend-servicemanager": "~3.0",
         "zendframework/zend-eventmanager": "~3.0",
         "zendframework/zend-modulemanager": "~2.6",
         "doctrine/common": "~2.6"
