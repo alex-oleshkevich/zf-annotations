@@ -18,22 +18,22 @@ class DoctrineAnnotationParserFactoryTest2 extends PHPUnit_Framework_TestCase
 
     public function testCanCreateViaServiceManager()
     {
-        $sm = new ServiceManager(new Config(array(
-            'factories' => array(
+        $sm = new ServiceManager([
+            'factories' => [
                 'DoctrineAnnotationParser' => DoctrineAnnotationParserFactory::class
-            )
-        )));
-        $sm->setService('Config', array(
-            'zf_annotation' => array(
-                'annotations' => array()
-            )
-        ));
+            ]
+        ]);
+        $sm->setService('Config', [
+            'zf_annotation' => [
+                'annotations' => []
+            ]
+        ]);
 
         $this->assertInstanceOf(DoctrineAnnotationParser::class, $sm->get('DoctrineAnnotationParser'));
     }
 
     public function testCanCreateViaStaticMethod()
     {
-        $this->assertInstanceOf(DoctrineAnnotationParser::class, DoctrineAnnotationParserFactory::factory(array()));
+        $this->assertInstanceOf(DoctrineAnnotationParser::class, DoctrineAnnotationParserFactory::factory([]));
     }
 }
