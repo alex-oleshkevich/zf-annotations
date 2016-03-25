@@ -13,13 +13,12 @@
     ],
     "require": {
         "php": ">=5.5",
-        "zendframework/zend-code": ">=2.4",
-        "zendframework/zend-console": ">=2.4",
-        "zendframework/zend-filter": ">=2.4",
-        "zendframework/zend-servicemanager": ">=2.4",
-        "zendframework/zend-eventmanager": ">=2.4",
-        "zendframework/zend-modulemanager": ">=2.4",
-        "doctrine/common": ">=2.1"
+        "zendframework/zend-code": "~2.6",
+        "zendframework/zend-filter": "~2.5",
+        "zendframework/zend-servicemanager": "~2.6",
+        "zendframework/zend-eventmanager": "~3.0",
+        "zendframework/zend-modulemanager": "~2.6",
+        "doctrine/common": "~2.6"
     },
     "autoload": {
         "psr-0": {

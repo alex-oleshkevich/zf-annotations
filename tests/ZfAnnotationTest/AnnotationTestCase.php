@@ -81,10 +81,10 @@ class AnnotationTestCase extends PHPUnit_Framework_TestCase
         $this->listener->attach($events);
         
         $event = new ParseEvent(ParseEvent::EVENT_CLASS_PARSED, $annotations, ['config' => $config, 'scannedConfig' => array()]);
-        $events->trigger($event);
+        $events->triggerEvent($event);
         
         $finalizeEvent = new ParseEvent(ParseEvent::EVENT_FINALIZE, $event->getResult(), ['config' => $config]);
-        $events->trigger($finalizeEvent);
+        $events->triggerEvent($finalizeEvent);
         return $finalizeEvent->getTarget();
     }
 
