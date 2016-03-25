@@ -28,7 +28,7 @@ class ClassParser
      *
      * @var array
      */
-    protected $config = array();
+    protected $config = [];
 
     /**
      * @var AnnotationManager
@@ -67,20 +67,20 @@ class ClassParser
      */
     public function parse($classes)
     {
-        $config = array();
+        $config = [];
         foreach ($classes as $class) {
             $classAnnotationHolder = $this->parseClass($class);
-            $event = new ParseEvent(ParseEvent::EVENT_CLASS_PARSED, $classAnnotationHolder, array(
+            $event = new ParseEvent(ParseEvent::EVENT_CLASS_PARSED, $classAnnotationHolder, [
                 'config' => $this->config,
                 'scannedConfig' => $config
-            ));
+            ]);
             $this->eventManager->triggerEvent($event);
             $config = ArrayUtils::merge($config, $event->getResult());
         }
         
-        $finalizeEvent = new ParseEvent(ParseEvent::EVENT_FINALIZE, $config, array(
+        $finalizeEvent = new ParseEvent(ParseEvent::EVENT_FINALIZE, $config, [
             'config' => $this->config
-        ));
+        ]);
         $this->eventManager->triggerEvent($finalizeEvent);
         $config = $finalizeEvent->getTarget();
         
@@ -102,7 +102,7 @@ class ClassParser
                 $classAnnotationHolder->addAnnotation($annotation);
             }
         } else {
-            $classAnnotations = new AnnotationCollection(array());
+            $classAnnotations = new AnnotationCollection([]);
         }
 
         foreach ($class->getMethods() as $method) {

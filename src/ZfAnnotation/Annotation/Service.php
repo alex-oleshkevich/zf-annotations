@@ -38,7 +38,7 @@ class Service implements AnnotationInterface
     /**
      * @var array
      */
-    public $aliases = array();
+    public $aliases = [];
 
     /**
      * @var string
@@ -145,7 +145,7 @@ class Service implements AnnotationInterface
      * 
      * @param array $aliases
      */
-    public function setAliases(array $aliases = array())
+    public function setAliases(array $aliases = [])
     {
         $this->aliases = $aliases;
     }

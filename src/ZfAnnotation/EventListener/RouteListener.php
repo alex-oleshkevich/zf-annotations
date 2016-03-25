@@ -32,18 +32,18 @@ class RouteListener extends AbstractListenerAggregate
     /**
      * @var array
      */
-    protected $config = array();
+    protected $config = [];
     
     /**
      *
      * @var array
      */
-    protected $scannedConfig = array();
+    protected $scannedConfig = [];
 
     /**
      * @var array
      */
-    protected $controllerCache = array();
+    protected $controllerCache = [];
 
     /**
      * @param EventManagerInterface $events
@@ -86,11 +86,11 @@ class RouteListener extends AbstractListenerAggregate
             }
         }
 
-        $event->mergeResult(array(
-            'router' => array(
+        $event->mergeResult([
+            'router' => [
                 'routes' => $this->config
-            )
-        ));
+            ]
+        ]);
     }
 
     /**
@@ -126,9 +126,9 @@ class RouteListener extends AbstractListenerAggregate
      */
     private function extractControllers(array $config)
     {
-        $controllers = isset($config['controllers']) ? $config['controllers'] : array();
-        $controllers['invokables'] = isset($controllers['invokables']) ? $controllers['invokables'] : array();
-        $controllers['factories'] = isset($controllers['factories']) ? $controllers['factories'] : array();
+        $controllers = isset($config['controllers']) ? $config['controllers'] : [];
+        $controllers['invokables'] = isset($controllers['invokables']) ? $controllers['invokables'] : [];
+        $controllers['factories'] = isset($controllers['factories']) ? $controllers['factories'] : [];
         return ArrayUtils::merge($controllers['invokables'], $controllers['factories']);
     }
 
@@ -195,7 +195,7 @@ class RouteListener extends AbstractListenerAggregate
         $routeConfig = $this->getRouteConfig($annotation);
 
         if ($annotation->getExtends()) {
-            $tmp = array();
+            $tmp = [];
             $ref = &$this->getReferenceForPath(explode('/', $annotation->getExtends()), $tmp);
             $ref = $routeConfig;
             return $tmp;
@@ -288,19 +288,19 @@ class RouteListener extends AbstractListenerAggregate
      */
     protected function getRouteConfig(AnnotationInterface $annotation)
     {
-        return array(
-            $annotation->getName() => array(
+        return [
+            $annotation->getName() => [
                 'type' => $annotation->getType(),
-                'options' => array(
+                'options' => [
                     'route' => $annotation->getRoute(),
                     'defaults' => $annotation->getDefaults(),
                     'constraints' => $annotation->getConstraints()
-                ),
+                ],
                 'priority' => (int) $annotation->getPriority(),
                 'may_terminate' => (bool) $annotation->getMayTerminate(),
-                'child_routes' => array()
-            )
-        );
+                'child_routes' => []
+            ]
+        ];
     }
 
     /**
@@ -324,9 +324,9 @@ class RouteListener extends AbstractListenerAggregate
 
         foreach ($path as $key) {
             if (!isset($ref[$key])) {
-                $ref[$key] = array(
-                    'child_routes' => array()
-                );
+                $ref[$key] = [
+                    'child_routes' => []
+                ];
             }
             $ref = &$ref[$key]['child_routes'];
         }

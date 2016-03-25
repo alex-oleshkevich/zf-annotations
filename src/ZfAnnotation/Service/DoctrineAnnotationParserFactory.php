@@ -46,7 +46,7 @@ class DoctrineAnnotationParserFactory implements FactoryInterface
      * @param array $annotations
      * @return DoctrineAnnotationParser
      */
-    public static function factory(array $annotations = array())
+    public static function factory(array $annotations = [])
     {
         $parser = new DoctrineAnnotationParser;
         $parser->registerAnnotations($annotations);

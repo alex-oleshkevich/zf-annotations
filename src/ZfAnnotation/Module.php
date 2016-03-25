@@ -32,7 +32,7 @@ class Module implements AutoloaderProviderInterface, InitProviderInterface, Conf
     public function init(ModuleManagerInterface $moduleManager)
     {
         $eventManager = $moduleManager->getEventManager();
-        $eventManager->attach(ModuleEvent::EVENT_MERGE_CONFIG, array($this, 'onMergeConfig'));
+        $eventManager->attach(ModuleEvent::EVENT_MERGE_CONFIG, [$this, 'onMergeConfig']);
     }
 
     /**
@@ -49,7 +49,7 @@ class Module implements AutoloaderProviderInterface, InitProviderInterface, Conf
         $parser = ClassParserFactory::factory($config, $event->getTarget()->getEventManager(), $annotationManager);
         $modules = $event->getTarget()->getLoadedModules();
         $modulesAllowedToScan = $config['zf_annotation']['scan_modules'];
-        $classesToParse = array();
+        $classesToParse = [];
         foreach ($modules as $module) {
             $parts = explode('\\', get_class($module));
             $modName = array_shift($parts);
@@ -74,13 +74,13 @@ class Module implements AutoloaderProviderInterface, InitProviderInterface, Conf
      */
     public function getAutoloaderConfig()
     {
-        return array(
-            'Zend\Loader\StandardAutoloader' => array(
-                'namespaces' => array(
+        return [
+            'Zend\Loader\StandardAutoloader' => [
+                'namespaces' => [
                     __NAMESPACE__ => __DIR__ . '/src/' . __NAMESPACE__,
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 
     /**
@@ -95,9 +95,9 @@ class Module implements AutoloaderProviderInterface, InitProviderInterface, Conf
 
     public function getConsoleUsage()
     {
-        return array(
+        return [
             'config dump' => 'Compiles config and dump into cache file.',
-        );
+        ];
     }
 
 }

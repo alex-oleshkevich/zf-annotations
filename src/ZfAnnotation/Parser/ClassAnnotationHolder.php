@@ -36,7 +36,7 @@ class ClassAnnotationHolder
      *
      * @var MethodAnnotationHolder[]
      */
-    protected $methods = array();
+    protected $methods = [];
 
     /**
      * 

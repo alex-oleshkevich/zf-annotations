@@ -28,7 +28,7 @@ class ParseEvent extends Event
      *
      * @var array
      */
-    protected $result = array();
+    protected $result = [];
 
     /**
      * 

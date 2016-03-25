@@ -30,7 +30,7 @@ class ServiceListener extends AbstractListenerAggregate
     /**
      * @var array
      */
-    protected $definitions = array();
+    protected $definitions = [];
 
     /**
      * @param EventManagerInterface $events
@@ -93,7 +93,7 @@ class ServiceListener extends AbstractListenerAggregate
                     throw new InvalidAnnotationException('Delegator annotation must contain "for" option.');
                 }
                 if (!isset($this->definitions[$annotation->getServiceManager()]['delegators'][$annotation->getFor()])) {
-                    $this->definitions[$annotation->getServiceManager()]['delegators'][$annotation->getFor()] = array();
+                    $this->definitions[$annotation->getServiceManager()]['delegators'][$annotation->getFor()] = [];
                 }
                 $this->definitions[$annotation->getServiceManager()]['delegators'][$annotation->getFor()][] = $class->getName();
                 break;
@@ -101,7 +101,7 @@ class ServiceListener extends AbstractListenerAggregate
                 throw new InvalidAnnotationException('Service annotation must have "type" property value. Seen in ' . $class->getName());
         }
 
-        $allowedToShareAndAlias = array('invokable', 'factory');
+        $allowedToShareAndAlias = ['invokable', 'factory'];
         if (in_array($annotation->getType(), $allowedToShareAndAlias)) {
             if (is_bool($annotation->getShared())) {
                 $this->definitions[$annotation->getServiceManager()]['shared'][$annotation->getName()] = $annotation->getShared();
