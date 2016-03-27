@@ -13,10 +13,9 @@ namespace ZfAnnotation\EventListener;
 use Zend\Code\Scanner\ClassScanner;
 use Zend\EventManager\AbstractListenerAggregate;
 use Zend\EventManager\EventManagerInterface;
-use Zend\ServiceManager\AbstractFactoryInterface;
-use Zend\ServiceManager\DelegatorFactoryInterface;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\InitializerInterface;
+use Zend\ServiceManager\Factory\AbstractFactoryInterface;
+use Zend\ServiceManager\Factory\DelegatorFactoryInterface;
+use Zend\ServiceManager\Factory\FactoryInterface;
 use ZfAnnotation\Annotation\Service;
 use ZfAnnotation\Event\ParseEvent;
 use ZfAnnotation\Exception\InvalidAnnotationException;
@@ -78,12 +77,6 @@ class ServiceListener extends AbstractListenerAggregate
                     throw new InvalidAnnotationException('Abstract service factory class must implement "' . AbstractFactoryInterface::class . '".');
                 }
                 $this->definitions[$annotation->getServiceManager()]['abstract_factories'][] = $class->getName();
-                break;
-            case 'initializer':
-                if (!in_array(InitializerInterface::class, $class->getInterfaces())) {
-                    throw new InvalidAnnotationException('Initializer must implement "' . InitializerInterface::class . '".');
-                }
-                $this->definitions[$annotation->getServiceManager()]['initializers'][] = $class->getName();
                 break;
             case 'delegator':
                 if (!in_array(DelegatorFactoryInterface::class, $class->getInterfaces())) {

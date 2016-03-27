@@ -2,22 +2,16 @@
 
 namespace ZfAnnotation\Service\TestService;
 
+use Interop\Container\ContainerInterface;
+use Zend\ServiceManager\Factory\AbstractFactoryInterface;
 use ZfAnnotation\Annotation\Service;
-use Zend\ServiceManager\AbstractFactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * @Service(type="abstractFactory")
  */
 class AbstractFactoryService implements AbstractFactoryInterface
 {
-
-    public function canCreateServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)
-    {
-        
-    }
-
-    public function createServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)
+    public function canCreate(ContainerInterface $container, $requestedName)
     {
         
     }

@@ -2,9 +2,9 @@
 
 namespace ZfAnnotation\Service\TestService;
 
+use Interop\Container\ContainerInterface;
+use Zend\ServiceManager\Factory\DelegatorFactoryInterface;
 use ZfAnnotation\Annotation\Service;
-use Zend\ServiceManager\DelegatorFactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * @Service(type="delegator", for="IndexController")
@@ -12,7 +12,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 class Delegator implements DelegatorFactoryInterface
 {
 
-    public function createDelegatorWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName, $callback)
+    public function __invoke(ContainerInterface $container, $name, $callback, array $options = null)
     {
         
     }

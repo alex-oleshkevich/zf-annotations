@@ -8,12 +8,10 @@ use ZfAnnotation\Service\TestService\AbstractFactoryService;
 use ZfAnnotation\Service\TestService\CompleteServiceDefinition;
 use ZfAnnotation\Service\TestService\Delegator;
 use ZfAnnotation\Service\TestService\FactoryService;
-use ZfAnnotation\Service\TestService\Initializer;
 use ZfAnnotation\Service\TestService\InvalidAbstractFactoryService;
 use ZfAnnotation\Service\TestService\InvalidDelegator;
 use ZfAnnotation\Service\TestService\InvalidDelegatorNoFor;
 use ZfAnnotation\Service\TestService\InvalidFactoryService;
-use ZfAnnotation\Service\TestService\InvalidInitializer;
 use ZfAnnotationTest\AnnotationTestCase;
 
 class_alias(InvalidAnnotationException::class, 'ZfaInvalidAnnotationException');
@@ -89,27 +87,6 @@ class ServiceTest extends AnnotationTestCase
     public function testInvalidAbstractFactoryService()
     {
         $this->parse(InvalidAbstractFactoryService::class);
-    }
-    
-    public function testInitializer()
-    {
-        $actual = $this->parse(Initializer::class);
-        $expected = array(
-            'service_manager' => array(
-                'initializers' => array(
-                    'ZfAnnotation\Service\TestService\Initializer',
-                ),
-            ),
-        );
-        $this->assertEquals($expected, $actual);
-    }
-    
-    /**
-     * @expectedException ZfaInvalidAnnotationException
-     */
-    public function testInvalidInitializer()
-    {
-        $this->parse(InvalidInitializer::class);
     }
     
     public function testDelegator()

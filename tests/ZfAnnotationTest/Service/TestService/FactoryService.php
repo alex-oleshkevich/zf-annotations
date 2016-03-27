@@ -2,9 +2,9 @@
 
 namespace ZfAnnotation\Service\TestService;
 
+use Interop\Container\ContainerInterface;
+use Zend\ServiceManager\Factory\FactoryInterface;
 use ZfAnnotation\Annotation\Service;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * @Service(type="factory")
@@ -12,7 +12,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 class FactoryService implements FactoryInterface
 {
 
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         
     }
