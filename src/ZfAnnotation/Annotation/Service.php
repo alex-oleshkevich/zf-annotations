@@ -53,6 +53,11 @@ class Service implements AnnotationInterface
     public $for;
 
     /**
+     * @var string
+     */
+    public $factoryClass;
+
+    /**
      * @param array $content
      */
     public function initialize($content)
@@ -166,6 +171,24 @@ class Service implements AnnotationInterface
     public function setFor($for)
     {
         $this->for = $for;
+    }
+
+    /**
+     * 
+     * @return string
+     */
+    public function getFactoryClass()
+    {
+        return $this->factoryClass;
+    }
+
+    /**
+     * 
+     * @param string $factoryClass
+     */
+    public function setFactoryClass($factoryClass)
+    {
+        $this->factoryClass = $factoryClass;
     }
 
 }

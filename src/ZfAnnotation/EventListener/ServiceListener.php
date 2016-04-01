@@ -67,10 +67,14 @@ class ServiceListener extends AbstractListenerAggregate
                 $this->definitions[$annotation->getServiceManager()]['invokables'][$annotation->getName()] = $class->getName();
                 break;
             case 'factory':
-                if (!in_array(FactoryInterface::class, $class->getInterfaces())) {
-                    throw new InvalidAnnotationException('Service factory class must implement "' . FactoryInterface::class . '".');
+                if (!empty($annotation->getFactoryClass())) {
+                    $this->definitions[$annotation->getServiceManager()]['factories'][$annotation->getName()] = $annotation->getFactoryClass();
+                } else {
+                    if (!in_array(FactoryInterface::class, $class->getInterfaces())) {
+                        throw new InvalidAnnotationException('Service factory class must implement "' . FactoryInterface::class . '".');
+                    }
+                    $this->definitions[$annotation->getServiceManager()]['factories'][$annotation->getName()] = $class->getName();
                 }
-                $this->definitions[$annotation->getServiceManager()]['factories'][$annotation->getName()] = $class->getName();
                 break;
             case 'abstractFactory':
                 if (!in_array(AbstractFactoryInterface::class, $class->getInterfaces())) {
