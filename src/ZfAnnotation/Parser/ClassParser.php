@@ -10,6 +10,7 @@
 
 namespace ZfAnnotation\Parser;
 
+use Exception;
 use Zend\Code\Annotation\AnnotationCollection;
 use Zend\Code\Annotation\AnnotationManager;
 use Zend\Code\Scanner\ClassScanner;
@@ -69,13 +70,15 @@ class ClassParser
     {
         $config = [];
         foreach ($classes as $class) {
-            $classAnnotationHolder = $this->parseClass($class);
-            $event = new ParseEvent(ParseEvent::EVENT_CLASS_PARSED, $classAnnotationHolder, [
-                'config' => $this->config,
-                'scannedConfig' => $config
-            ]);
-            $this->eventManager->triggerEvent($event);
-            $config = ArrayUtils::merge($config, $event->getResult());
+            try {
+                $classAnnotationHolder = $this->parseClass($class);
+                $event = new ParseEvent(ParseEvent::EVENT_CLASS_PARSED, $classAnnotationHolder, [
+                    'config' => $this->config,
+                    'scannedConfig' => $config
+                ]);
+                $this->eventManager->triggerEvent($event);
+                $config = ArrayUtils::merge($config, $event->getResult());
+            } catch (Exception $e) {}
         }
         
         $finalizeEvent = new ParseEvent(ParseEvent::EVENT_FINALIZE, $config, [
