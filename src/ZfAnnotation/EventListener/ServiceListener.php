@@ -61,6 +61,10 @@ class ServiceListener extends AbstractListenerAggregate
         if (!$annotation->getName()) {
             $annotation->setName($class->getName());
         }
+        
+        if ($annotation->getType() == 'invokable' && $annotation->getFactoryClass()) {
+            $annotation->setType('factory');
+        }
 
         switch ($annotation->getType()) {
             case 'invokable':
