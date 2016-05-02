@@ -10,7 +10,6 @@
 
 namespace ZfAnnotation\Parser;
 
-use Exception;
 use Zend\Code\Annotation\AnnotationCollection;
 use Zend\Code\Annotation\AnnotationManager;
 use Zend\Code\Scanner\ClassScanner;
