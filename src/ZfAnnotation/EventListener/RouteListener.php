@@ -359,7 +359,7 @@ class RouteListener extends AbstractListenerAggregate
      */
     public function isValidForChildNode(Route $annotation)
     {
-        return (bool) $annotation->extends == false;
+        return ((bool) $annotation->extends) === false;
     }
 
 }
