@@ -61,7 +61,17 @@ class Module implements AutoloaderProviderInterface, InitProviderInterface, Conf
             $dir = dirname($ref->getFileName());
 
             $classes = new DirectoryScanner($dir);
-            $classesToParse = array_merge($classesToParse, $classes->getClasses());
+            /* @var $class \Zend\Code\Scanner\ClassScanner */
+            foreach ($classes->getClasses() as $class) {
+                try {
+                    // keep this, zend throws an exception when loads a php file 
+                    // w\o class inside (eg. application.config.php)
+                    $class->getName();
+                    $classesToParse[] = $class;
+                } catch (Exception $ex) {
+                    // skip
+                }
+            }
         }
         $parsedConfig = $parser->parse($classesToParse);
         $event->getConfigListener()->setMergedConfig(array_replace_recursive($parsedConfig, $config));
