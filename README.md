@@ -7,7 +7,7 @@ The goal of this project is to get rid of large configuration arrays in applicat
 ![Build Status](https://travis-ci.org/alex-oleshkevich/zf-annotations.svg)
 [![Latest Stable Version](https://poser.pugx.org/alex-oleshkevich/zf-annotations/v/stable.svg)](https://packagist.org/packages/alex-oleshkevich/zf-annotations) 
 [![Monthly Downloads](https://poser.pugx.org/phpunit/phpunit/d/monthly)](https://packagist.org/packages/phpunit/phpunit)
-[![Total Downloads](https://poser.pugx.org/alex-oleshkevich/zf-annotations/downloads.svg)](https://packagist.org/packages/alex-oleshkevich/zf-annotations) 
+[![Total Downloads](https://poser.pugx.org/alex-oleshkevich/zf-annotations/downloads)](https://packagist.org/packages/alex-oleshkevich/zf-annotations)
 [![Latest Unstable Version](https://poser.pugx.org/alex-oleshkevich/zf-annotations/v/unstable.svg)](https://packagist.org/packages/alex-oleshkevich/zf-annotations) 
 [![License](https://poser.pugx.org/alex-oleshkevich/zf-annotations/license.svg)](https://packagist.org/packages/alex-oleshkevich/zf-annotations)
 ![Deps. Status](https://www.versioneye.com/user/projects/54d47c133ca08495310002b0/badge.svg?style=flat)
