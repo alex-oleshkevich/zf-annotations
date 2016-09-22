@@ -5,6 +5,10 @@ namespace ZfAnnotationTest\Route;
 use ZfAnnotation\EventListener\RouteListener;
 use ZfAnnotationTest\AnnotationTestCase;
 
+/**
+ * @group zfa-router
+ * @group zfa-simple-route
+ */
 class SimpleRouteAnnotationTest extends AnnotationTestCase
 {
 
@@ -18,7 +22,7 @@ class SimpleRouteAnnotationTest extends AnnotationTestCase
      */
     public function testAllParamsSetAndAccessible()
     {
-        $route = $this->parse('ZfAnnotationTest\Route\TestController\NoBaseController')['router']['routes']['complete-definition'];
+        $route = $this->parse(TestAsset\NoBaseController::class)['router']['routes']['complete-definition'];
 
         $expected = array(
             'type' => 'segment',
@@ -43,7 +47,7 @@ class SimpleRouteAnnotationTest extends AnnotationTestCase
 
     public function testAutodetectRouteName()
     {
-        $config = $this->parse('ZfAnnotationTest\Route\TestController\NoBaseController')['router']['routes'];
+        $config = $this->parse(TestAsset\NoBaseController::class)['router']['routes'];
         $this->assertArrayHasKey('no-route-name', $config);
 
         $routeArray = array(
@@ -66,7 +70,7 @@ class SimpleRouteAnnotationTest extends AnnotationTestCase
 
     public function testAutodetectRoute()
     {
-        $config = $this->parse('ZfAnnotationTest\Route\TestController\NoBaseController')['router']['routes'];
+        $config = $this->parse(TestAsset\NoBaseController::class)['router']['routes'];
         $this->assertArrayHasKey('no-route', $config);
 
         $routeArray = array(
@@ -89,7 +93,7 @@ class SimpleRouteAnnotationTest extends AnnotationTestCase
 
     public function testAutodetectType()
     {
-        $config = $this->parse('ZfAnnotationTest\Route\TestController\NoBaseController')['router']['routes'];
+        $config = $this->parse(TestAsset\NoBaseController::class)['router']['routes'];
         $this->assertArrayHasKey('no-type', $config);
 
         $routeArray = array(
@@ -112,7 +116,7 @@ class SimpleRouteAnnotationTest extends AnnotationTestCase
 
     public function testAutodetectController()
     {
-        $config = $this->parse('ZfAnnotationTest\Route\TestController\NoBaseController')['router']['routes'];
+        $config = $this->parse(TestAsset\NoBaseController::class)['router']['routes'];
         $this->assertArrayHasKey('no-controller', $config);
 
         $routeArray = array(
@@ -121,7 +125,7 @@ class SimpleRouteAnnotationTest extends AnnotationTestCase
             'options' => array(
                 'route' => '/no-controller',
                 'defaults' => array(
-                    'controller' => 'ZfAnnotationTest\Route\TestController\NoBaseController',
+                    'controller' => TestAsset\NoBaseController::class,
                     'action' => 'no-route'
                 ),
                 'constraints' => null
@@ -135,7 +139,7 @@ class SimpleRouteAnnotationTest extends AnnotationTestCase
 
     public function testAutodetectAction()
     {
-        $config = $this->parse('ZfAnnotationTest\Route\TestController\NoBaseController')['router']['routes'];
+        $config = $this->parse(TestAsset\NoBaseController::class)['router']['routes'];
         $this->assertArrayHasKey('no-action', $config);
 
         $routeArray = array(
@@ -144,7 +148,7 @@ class SimpleRouteAnnotationTest extends AnnotationTestCase
             'options' => array(
                 'route' => '/no-action',
                 'defaults' => array(
-                    'controller' => 'ZfAnnotationTest\Route\TestController\NoBaseController',
+                    'controller' => TestAsset\NoBaseController::class,
                     'action' => 'no-action'
                 ),
                 'constraints' => null

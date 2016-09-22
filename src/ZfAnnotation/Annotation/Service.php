@@ -10,14 +10,12 @@
 
 namespace ZfAnnotation\Annotation;
 
-use Zend\Code\Annotation\AnnotationInterface;
-
 /**
  * A service annotation.
  * 
  * @Annotation
  */
-class Service implements AnnotationInterface
+class Service
 {
 
     /**

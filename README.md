@@ -1,12 +1,12 @@
-## Annotations for Zend Framework 2.
+## Annotations for Zend Framework.
 
-This module provides "configuration via annotation" support for Zend Framework 2.
+This module provides "configuration via annotation" support for Zend Framework.
 Out of the box it allows to define routes, service and all the ServiceManager-based implementations (as controllers, view helpers, etc).  
 The goal of this project is to get rid of large configuration arrays in application configs.
 
 ![Build Status](https://travis-ci.org/alex-oleshkevich/zf-annotations.svg)
 [![Latest Stable Version](https://poser.pugx.org/alex-oleshkevich/zf-annotations/v/stable.svg)](https://packagist.org/packages/alex-oleshkevich/zf-annotations) 
-[![Monthly Downloads](https://poser.pugx.org/phpunit/phpunit/d/monthly)](https://packagist.org/packages/phpunit/phpunit)
+[![Monthly Downloads](https://poser.pugx.org/alex-oleshkevich/zf-annotations/d/monthly)](https://packagist.org/packages/alex-oleshkevich/zf-annotations)
 [![Total Downloads](https://poser.pugx.org/alex-oleshkevich/zf-annotations/downloads)](https://packagist.org/packages/alex-oleshkevich/zf-annotations)
 [![Latest Unstable Version](https://poser.pugx.org/alex-oleshkevich/zf-annotations/v/unstable.svg)](https://packagist.org/packages/alex-oleshkevich/zf-annotations) 
 [![License](https://poser.pugx.org/alex-oleshkevich/zf-annotations/license.svg)](https://packagist.org/packages/alex-oleshkevich/zf-annotations)
@@ -15,10 +15,12 @@ The goal of this project is to get rid of large configuration arrays in applicat
 ### Requirements
 * PHP >= 5.5.0
 
+### Please, note
+1. if you want to use Zend libraries from Zend Framework 2, use ~1.0 versions. Branch ~2.0 supports future versions of Zend Framework and may not be compatible with ZF 2.
+
+2. Since version 2.3 the module does not uses `zendframework/zend-code` as a backend and uses doctrine/annotations directrly. See [doctrine documentation](http://docs.doctrine-project.org/projects/doctrine-common/en/latest/reference/annotations.html) for more details and options.
+
 ### Installation
-
-* **NOTE:** if you want to use Zend libraries from Zend Framework 2, use ~1.0 versions. Branch ~2.0 supports future versions of Zend Framework and may not be compatible with ZF 2.*
-
 ##### Require via composer
 
 ```bash
@@ -50,13 +52,27 @@ array(
             // ...
         ),
         
+        /*
+         * IMPORTANT NOTE:
+         * The given directories should NOT be the directory where classes of the namespace are in, 
+         * but the base directory of the root namespace. The AnnotationRegistry uses a namespace to directory separator
+         * approach to resolve the correct path.
+         */
+        'namespaces' => array(
+            'My\Annotation' => '/path/to/annotations'
+        ),
+        
         // listeners to events emitted by parser. 
         // they process class annotations and transforms them into config values
         // add your own here.
         'event_listeners' => array(
             'ZfAnnotation\EventListener\RouteListener',
             // ...
-        )
+        ),
+        // if not null, supplied directory would used for cache to speed up parsing
+        'cache' => '/path/to/cache/dir',
+        // if true, will ignore cached data and always return a fresh one.
+        'cache_debug' => false
     )
 )
 ```

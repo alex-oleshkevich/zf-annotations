@@ -10,12 +10,10 @@
 
 namespace ZfAnnotation\Annotation;
 
-use Zend\Code\Annotation\AnnotationInterface;
-
 /**
  * @Annotation
  */
-class Route implements AnnotationInterface
+class Route
 {
 
     /**

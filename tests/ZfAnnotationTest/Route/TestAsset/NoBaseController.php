@@ -1,5 +1,5 @@
 <?php
-namespace ZfAnnotationTest\Route\TestController;
+namespace ZfAnnotationTest\Route\TestAsset;
 
 use ZfAnnotation\Annotation as Router;
 use Zend\Mvc\Controller\AbstractActionController;

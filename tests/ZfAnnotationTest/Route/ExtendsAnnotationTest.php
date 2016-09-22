@@ -6,15 +6,17 @@ use ZfAnnotation\EventListener\RouteListener;
 use ZfAnnotationTest\AnnotationTestCase;
 
 /**
- * @group extends
+ * @group zfa-router
+ * @group zfa-router-extends
  */
 class ExtendsAnnotationTest extends AnnotationTestCase
 {
+
     protected function setUp()
     {
         $this->listener = new RouteListener;
     }
-    
+
     public function testIndexRouteCorrected()
     {
         $routeConfig = array(
@@ -35,8 +37,8 @@ class ExtendsAnnotationTest extends AnnotationTestCase
                 )
             )
         );
-        
-        $config = array_replace_recursive($this->parse('ZfAnnotationTest\Route\TestController\ExtendsController')['router']['routes'], $routeConfig);
+
+        $config = array_replace_recursive($this->parse(TestAsset\ExtendsController::class)['router']['routes'], $routeConfig);
 
         $expected = array(
             'default' => array(
@@ -59,7 +61,7 @@ class ExtendsAnnotationTest extends AnnotationTestCase
                                 'options' => array(
                                     'route' => '/root',
                                     'defaults' => array(
-                                        'controller' => 'ZfAnnotationTest\Route\TestController\ExtendsController',
+                                        'controller' => TestAsset\ExtendsController::class,
                                         'action' => 'index'
                                     ),
                                     'constraints' => null
@@ -72,7 +74,7 @@ class ExtendsAnnotationTest extends AnnotationTestCase
                                         'options' => array(
                                             'route' => '/index',
                                             'defaults' => array(
-                                                'controller' => 'ZfAnnotationTest\Route\TestController\ExtendsController',
+                                                'controller' => TestAsset\ExtendsController::class,
                                                 'action' => 'index'
                                             ),
                                             'constraints' => null

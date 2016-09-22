@@ -6,7 +6,8 @@ use ZfAnnotation\EventListener\RouteListener;
 use ZfAnnotationTest\AnnotationTestCase;
 
 /**
- * @group invalid-root-node
+ * @group zfa-router
+ * @group zfa-router-invalid-root-node
  */
 class InvalidRootRouteAnnotationTest extends AnnotationTestCase
 {
@@ -21,7 +22,7 @@ class InvalidRootRouteAnnotationTest extends AnnotationTestCase
      */
     public function testExceptionThrown()
     {
-        $this->parse('ZfAnnotationTest\Route\TestController\InvalidRootRouteController');
+        $this->parse(TestAsset\InvalidRootRouteController::class);
     }
 
 }

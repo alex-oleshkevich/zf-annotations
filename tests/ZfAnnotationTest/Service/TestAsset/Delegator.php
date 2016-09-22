@@ -1,6 +1,6 @@
 <?php
 
-namespace ZfAnnotation\Service\TestService;
+namespace ZfAnnotationTest\Service\TestAsset;
 
 use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\Factory\DelegatorFactoryInterface;
@@ -12,7 +12,7 @@ use ZfAnnotation\Annotation\Service;
 class Delegator implements DelegatorFactoryInterface
 {
 
-    public function __invoke(ContainerInterface $container, $name, $callback, array $options = null)
+    public function __invoke(ContainerInterface $container, $name, callable $callback, array $options = null)
     {
         
     }

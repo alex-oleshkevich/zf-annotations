@@ -13,15 +13,13 @@ namespace ZfAnnotation;
 use Exception;
 use ReflectionClass;
 use Traversable;
-use Zend\Code\Scanner\DirectoryScanner;
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\ModuleManager\Feature\InitProviderInterface;
 use Zend\ModuleManager\ModuleEvent;
 use Zend\ModuleManager\ModuleManagerInterface;
-use ZfAnnotation\Service\AnnotationManagerFactory;
+use ZfAnnotation\Parser\DirectoryScanner;
 use ZfAnnotation\Service\ClassParserFactory;
-use ZfAnnotation\Service\DoctrineAnnotationParserFactory;
 
 class Module implements AutoloaderProviderInterface, InitProviderInterface, ConfigProviderInterface
 {
@@ -43,13 +41,13 @@ class Module implements AutoloaderProviderInterface, InitProviderInterface, Conf
     {
         // do not parse annotations if config cache is enabled.
         $config = $event->getConfigListener()->getMergedConfig(false);
-
-        $doctrineParser = DoctrineAnnotationParserFactory::factory($config['zf_annotation']['annotations']);
-        $annotationManager = AnnotationManagerFactory::factory($doctrineParser);
-        $parser = ClassParserFactory::factory($config, $event->getTarget()->getEventManager(), $annotationManager);
+        $annotationReader = Factory\AnnotationReaderFactory::factory($config['zf_annotation']);
+        $parser = ClassParserFactory::factory($config, $event->getTarget()->getEventManager(), $annotationReader);
+        $scanner = new DirectoryScanner;
+        $classesToParse = [];
         $modules = $event->getTarget()->getLoadedModules();
         $modulesAllowedToScan = $config['zf_annotation']['scan_modules'];
-        $classesToParse = [];
+        
         foreach ($modules as $module) {
             $parts = explode('\\', get_class($module));
             $modName = array_shift($parts);
@@ -59,18 +57,9 @@ class Module implements AutoloaderProviderInterface, InitProviderInterface, Conf
 
             $ref = new ReflectionClass($module);
             $dir = dirname($ref->getFileName());
-
-            $classes = new DirectoryScanner($dir);
-            /* @var $class \Zend\Code\Scanner\ClassScanner */
-            foreach ($classes->getClasses() as $class) {
-                try {
-                    // keep this, zend throws an exception when loads a php file 
-                    // w\o class inside (eg. application.config.php)
-                    $class->getName();
-                    $classesToParse[] = $class;
-                } catch (Exception $ex) {
-                    // skip
-                }
+            
+            foreach ($scanner->scan($dir) as $class) {
+                $classesToParse[] = $class;
             }
         }
         $parsedConfig = $parser->parse($classesToParse);

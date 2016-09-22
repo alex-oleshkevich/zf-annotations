@@ -6,7 +6,8 @@ use ZfAnnotation\EventListener\RouteListener;
 use ZfAnnotationTest\AnnotationTestCase;
 
 /**
- * @group priority
+ * @group zfa-router
+ * @group zfa-router-priority
  */
 class PriorityRouteAnnotationTest extends AnnotationTestCase
 {
@@ -18,7 +19,7 @@ class PriorityRouteAnnotationTest extends AnnotationTestCase
 
     public function testPriorityAdded()
     {
-        $config = $this->parse('ZfAnnotationTest\Route\TestController\PriorityController')['router']['routes'];
+        $config = $this->parse(TestAsset\PriorityController::class)['router']['routes'];
 
         $expected = array(
             'index' =>
@@ -29,7 +30,7 @@ class PriorityRouteAnnotationTest extends AnnotationTestCase
                     'route' => '/root/:id/:method',
                     'defaults' =>
                     array(
-                        'controller' => 'ZfAnnotationTest\\Route\\TestController\\PriorityController',
+                        'controller' => TestAsset\PriorityController::class,
                         'action' => 'index',
                     ),
                     'constraints' =>

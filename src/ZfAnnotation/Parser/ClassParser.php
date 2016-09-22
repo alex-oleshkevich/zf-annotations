@@ -10,9 +10,8 @@
 
 namespace ZfAnnotation\Parser;
 
-use Zend\Code\Annotation\AnnotationCollection;
-use Zend\Code\Annotation\AnnotationManager;
-use Zend\Code\Scanner\ClassScanner;
+use Doctrine\Common\Annotations\AnnotationReader;
+use ReflectionClass;
 use Zend\EventManager\EventManager;
 use Zend\EventManager\ListenerAggregateInterface;
 use Zend\Stdlib\ArrayUtils;
@@ -31,9 +30,9 @@ class ClassParser
     protected $config = [];
 
     /**
-     * @var AnnotationManager
+     * @var AnnotationReader
      */
-    protected $annotationManager;
+    protected $annotationReader;
 
     /**
      * @var EventManager
@@ -42,13 +41,13 @@ class ClassParser
 
     /**
      * @param array $config
-     * @param AnnotationManager $annotationManager
+     * @param AnnotationReader $annotationReader
      * @param EventManager $eventManager
      */
-    public function __construct(array $config, AnnotationManager $annotationManager, EventManager $eventManager)
+    public function __construct(array $config, AnnotationReader $annotationReader, EventManager $eventManager)
     {
         $this->config = $config;
-        $this->annotationManager = $annotationManager;
+        $this->annotationReader = $annotationReader;
         $this->eventManager = $eventManager;
     }
 
@@ -63,7 +62,7 @@ class ClassParser
 
     /**
      * 
-     * @param ClassScanner[] $classes
+     * @param string[] $classes
      */
     public function parse($classes)
     {
@@ -77,42 +76,37 @@ class ClassParser
             $this->eventManager->triggerEvent($event);
             $config = ArrayUtils::merge($config, $event->getResult());
         }
-        
+
         $finalizeEvent = new ParseEvent(ParseEvent::EVENT_FINALIZE, $config, [
             'config' => $this->config
         ]);
         $this->eventManager->triggerEvent($finalizeEvent);
         $config = $finalizeEvent->getTarget();
-        
+
         return $config;
     }
 
     /**
      * 
-     * @param ClassScanner $class
+     * @param string $class
      * @return ClassAnnotationHolder
      */
-    public function parseClass(ClassScanner $class)
+    public function parseClass($class)
     {
-        $classAnnotationHolder = new ClassAnnotationHolder($class);
+        $ref = new ReflectionClass($class);
+        $classAnnotationHolder = new ClassAnnotationHolder($ref);
+        $classAnnotations = $this->annotationReader->getClassAnnotations($ref);
 
-        $classAnnotations = $class->getAnnotations($this->annotationManager);
-        if ($classAnnotations instanceof AnnotationCollection) {
-            foreach ($classAnnotations as $annotation) {
-                $classAnnotationHolder->addAnnotation($annotation);
-            }
-        } else {
-            $classAnnotations = new AnnotationCollection([]);
+        foreach ($classAnnotations as $annotation) {
+            $classAnnotationHolder->addAnnotation($annotation);
         }
 
-        foreach ($class->getMethods() as $method) {
+        foreach ($ref->getMethods() as $method) {
             // zf can't process abstract methods for now, wrap with "try" block
             $methodAnnotationHolder = new MethodAnnotationHolder($method);
-            $methodAnnotations = $method->getAnnotations($this->annotationManager);
-            if ($methodAnnotations instanceof AnnotationCollection) {
-                foreach ($methodAnnotations as $annotation) {
-                    $methodAnnotationHolder->addAnnotation($annotation);
-                }
+            $methodAnnotations = $this->annotationReader->getMethodAnnotations($method);
+            foreach ($methodAnnotations as $annotation) {
+                $methodAnnotationHolder->addAnnotation($annotation);
             }
             $classAnnotationHolder->addMethod($methodAnnotationHolder);
         }

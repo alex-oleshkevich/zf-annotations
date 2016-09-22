@@ -6,7 +6,8 @@ use ZfAnnotation\EventListener\RouteListener;
 use ZfAnnotationTest\AnnotationTestCase;
 
 /**
- * @group namespaced
+ * @group zfa-router
+ * @group zfa-router-namespaced
  */
 class NamespacedRouteAnnotationTest extends AnnotationTestCase
 {
@@ -18,7 +19,7 @@ class NamespacedRouteAnnotationTest extends AnnotationTestCase
 
     public function testChildNodesAdded()
     {
-        $config = $this->parse('ZfAnnotationTest\Route\TestController\NamespacedController')['router']['routes'];
+        $config = $this->parse(TestAsset\NamespacedController::class)['router']['routes'];
 
         $expected = array(
             'root' => array(
@@ -60,7 +61,7 @@ class NamespacedRouteAnnotationTest extends AnnotationTestCase
                         'options' => array(
                             'route' => '/edit',
                             'defaults' => array(
-                                'controller' => 'ZfAnnotationTest\Route\TestController\NamespacedController',
+                                'controller' => TestAsset\NamespacedController::class,
                                 'action' => 'edit'
                             ),
                             'constraints' => null
@@ -74,7 +75,7 @@ class NamespacedRouteAnnotationTest extends AnnotationTestCase
                         'options' => array(
                             'route' => '/remove',
                             'defaults' => array(
-                                'controller' => 'ZfAnnotationTest\Route\TestController\NamespacedController',
+                                'controller' => TestAsset\NamespacedController::class,
                                 'action' => 'remove'
                             ),
                             'constraints' => null

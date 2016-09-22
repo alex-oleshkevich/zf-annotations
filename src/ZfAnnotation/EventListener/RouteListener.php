@@ -11,10 +11,8 @@
 namespace ZfAnnotation\EventListener;
 
 use Exception;
-use Zend\Code\Annotation\AnnotationCollection;
-use Zend\Code\Annotation\AnnotationInterface;
-use Zend\Code\Scanner\ClassScanner;
-use Zend\Code\Scanner\MethodScanner;
+use ReflectionClass;
+use ReflectionMethod;
 use Zend\EventManager\AbstractListenerAggregate;
 use Zend\EventManager\EventManagerInterface;
 use Zend\Filter\FilterChain;
@@ -65,13 +63,13 @@ class RouteListener extends AbstractListenerAggregate
         // handle class annotations
         $classHolder = $event->getTarget();
         $classAnnotationsCollection = $classHolder->getAnnotations();
-        $classAnnotations = new AnnotationCollection;
+        $classAnnotations = [];
         foreach ($classAnnotationsCollection as $annotation) {
             if (!$annotation instanceof Route) {
                 continue;
             }
 
-            $classAnnotations->append($annotation);
+            $classAnnotations[] = $annotation;
             $this->handleClassAnnotation($annotation, $classHolder->getClass());
         }
 
@@ -135,10 +133,10 @@ class RouteListener extends AbstractListenerAggregate
     /**
      * 
      * @param Route $annotation
-     * @param ClassScanner $class
+     * @param ReflectionClass $class
      * @throws InvalidArgumentException
      */
-    public function handleClassAnnotation(Route $annotation, ClassScanner $class)
+    public function handleClassAnnotation(Route $annotation, ReflectionClass $class)
     {
         if (!$this->isValidForRootNode($annotation)) {
             throw new InvalidArgumentException('"route" and "name" properties are required for class-level @Route annotation.');
@@ -151,11 +149,11 @@ class RouteListener extends AbstractListenerAggregate
     /**
      * 
      * @param Route $annotation
-     * @param ClassScanner $class
-     * @param MethodScanner $method
+     * @param ReflectionClass $class
+     * @param ReflectionMethod $method
      * @throws InvalidArgumentException
      */
-    public function handleMethodAnnotation(Route $annotation, AnnotationCollection $classAnnotations, ClassScanner $class, MethodScanner $method)
+    public function handleMethodAnnotation(Route $annotation, array $classAnnotations, ReflectionClass $class, ReflectionMethod $method)
     {
         foreach ($classAnnotations as $classAnnotation) {
             if ($annotation->getExtends()) {
@@ -184,11 +182,11 @@ class RouteListener extends AbstractListenerAggregate
     }
 
     /**
-     * @param AnnotationInterface $annotation
-     * @param ClassScanner $class
+     * @param Route $annotation
+     * @param ReflectionClass $class
      * @throws InvalidArgumentException
      */
-    public function annotationToRouteConfig(AnnotationInterface $annotation, ClassScanner $class, MethodScanner $method = null)
+    public function annotationToRouteConfig(Route $annotation, ReflectionClass $class, ReflectionMethod $method = null)
     {
         $method = $method ? : 'index';
         $annotation = $this->guessMissingFields($annotation, $method, $class->getName());
@@ -206,7 +204,7 @@ class RouteListener extends AbstractListenerAggregate
 
     protected function guessMissingFields(Route $annotation, $method, $controllerClass)
     {
-        if ($method instanceof MethodScanner) {
+        if ($method instanceof ReflectionMethod) {
             $methodName = $method->getName();
         } else if (is_string($method)) {
             $methodName = $method;
@@ -283,10 +281,10 @@ class RouteListener extends AbstractListenerAggregate
     /**
      * Converts annotation into ZF2 route config item.
      *
-     * @param AnnotationInterface $annotation
+     * @param Route $annotation
      * @return array
      */
-    protected function getRouteConfig(AnnotationInterface $annotation)
+    protected function getRouteConfig(Route $annotation)
     {
         return [
             $annotation->getName() => [

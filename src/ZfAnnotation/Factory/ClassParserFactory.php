@@ -8,14 +8,15 @@
  * @license   http://en.wikipedia.org/wiki/MIT_License MIT
  */
 
-namespace ZfAnnotation\Service;
+namespace ZfAnnotation\Factory;
 
+use Doctrine\Common\Annotations\AnnotationReader;
 use Interop\Container\ContainerInterface;
-use Zend\Code\Annotation\AnnotationManager;
 use Zend\EventManager\EventManager;
 use Zend\EventManager\EventManagerInterface;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
+use ZfAnnotation\Factory\AnnotationReaderFactory;
 use ZfAnnotation\Parser\ClassParser;
 
 /**
@@ -32,7 +33,7 @@ class ClassParserFactory implements FactoryInterface
     {
         return $this($serviceLocator, ClassParser::class);
     }
-    
+
     /**
      * 
      * @param ContainerInterface $container
@@ -44,24 +45,25 @@ class ClassParserFactory implements FactoryInterface
     {
         /* @var $eventManager EventManager */
         $eventManager = $container->get('EventManager');
-        $annotationManager = $container->get('ZfAnnotation\AnnotationManager');
+        $annotationReader = $container->get('ZfAnnotation\AnnotationReader');
         $config = $container->get('Config');
 
-        return self::factory($config, $eventManager, $annotationManager);
+        return self::factory($config, $eventManager, $annotationReader);
     }
 
     /**
      * 
      * @param array $config
      * @param EventManagerInterface $eventManager
+     * @param AnnotationReader $annotationReader
      * @return ClassParser
      */
-    public static function factory(array $config, EventManagerInterface $eventManager, AnnotationManager $annotationManager = null)
+    public static function factory(array $config, EventManagerInterface $eventManager, AnnotationReader $annotationReader = null)
     {
-        if (null === $annotationManager) {
-            $annotationManager = AnnotationManagerFactory::factory($config['zf_annotation']['annotations']);
+        if (null === $annotationReader) {
+            $annotationReader = AnnotationReaderFactory::factory($config['zf_annotation']);
         }
-        $parser = new ClassParser($config, $annotationManager, $eventManager);
+        $parser = new ClassParser($config, $annotationReader, $eventManager);
         foreach ($config['zf_annotation']['event_listeners'] as $listener) {
             $parser->attach(new $listener);
         }

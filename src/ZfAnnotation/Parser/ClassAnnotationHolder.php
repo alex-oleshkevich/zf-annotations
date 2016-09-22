@@ -10,9 +10,7 @@
 
 namespace ZfAnnotation\Parser;
 
-use Zend\Code\Annotation\AnnotationCollection;
-use Zend\Code\Annotation\AnnotationInterface;
-use Zend\Code\Scanner\ClassScanner;
+use ReflectionClass;
 
 /**
  * Contains class definition and its annotations.
@@ -22,15 +20,15 @@ class ClassAnnotationHolder
 
     /**
      *
-     * @var ClassScanner
+     * @var ReflectionClass
      */
     protected $class;
 
     /**
      *
-     * @var AnnotationCollection
+     * @var array
      */
-    protected $annotations;
+    protected $annotations = [];
 
     /**
      *
@@ -40,17 +38,16 @@ class ClassAnnotationHolder
 
     /**
      * 
-     * @param ClassScanner $class
+     * @param ReflectionClass $class
      */
-    public function __construct(ClassScanner $class)
+    public function __construct(ReflectionClass $class)
     {
         $this->class = $class;
-        $this->annotations = new AnnotationCollection;
     }
 
     /**
      * 
-     * @return ClassScanner
+     * @return ReflectionClass
      */
     public function getClass()
     {
@@ -59,16 +56,16 @@ class ClassAnnotationHolder
 
     /**
      * 
-     * @param AnnotationInterface $annotation
+     * @param object $annotation
      */
-    public function addAnnotation(AnnotationInterface $annotation)
+    public function addAnnotation($annotation)
     {
-        $this->annotations->append($annotation);
+        $this->annotations[] = $annotation;
     }
 
     /**
      * 
-     * @return AnnotationCollection
+     * @return array
      */
     public function getAnnotations()
     {

@@ -1,5 +1,6 @@
 <?php
-namespace ZfAnnotation\Service\TestService;
+
+namespace ZfAnnotationTest\Service\TestAsset;
 
 use ZfAnnotation\Annotation\Service;
 

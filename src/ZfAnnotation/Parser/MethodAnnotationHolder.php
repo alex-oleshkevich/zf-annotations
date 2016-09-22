@@ -10,9 +10,7 @@
 
 namespace ZfAnnotation\Parser;
 
-use Zend\Code\Annotation\AnnotationCollection;
-use Zend\Code\Annotation\AnnotationInterface;
-use Zend\Code\Scanner\MethodScanner;
+use ReflectionMethod;
 
 /**
  * Contains method definition and its annotations.
@@ -22,29 +20,28 @@ class MethodAnnotationHolder
 
     /**
      *
-     * @var MethodScanner
+     * @var ReflectionMethod
      */
     protected $method;
 
     /**
      *
-     * @var AnnotationCollection
+     * @var array
      */
-    protected $annotations;
+    protected $annotations = [];
 
     /**
      * 
-     * @param MethodScanner $method
+     * @param ReflectionMethod $method
      */
-    public function __construct(MethodScanner $method)
+    public function __construct(ReflectionMethod $method)
     {
         $this->method = $method;
-        $this->annotations = new AnnotationCollection;
     }
 
     /**
      * 
-     * @return MethodScanner
+     * @return ReflectionMethod
      */
     public function getMethod()
     {
@@ -53,16 +50,16 @@ class MethodAnnotationHolder
 
     /**
      * 
-     * @param AnnotationInterface $annotation
+     * @param object $annotation
      */
-    public function addAnnotation(AnnotationInterface $annotation)
+    public function addAnnotation($annotation)
     {
-        $this->annotations->append($annotation);
+        $this->annotations[] = $annotation;
     }
 
     /**
      * 
-     * @return AnnotationCollection
+     * @return array
      */
     public function getAnnotations()
     {

@@ -1,28 +1,28 @@
 <?php
-namespace ZfAnnotationTest\Route\TestController;
+namespace ZfAnnotationTest\Route\TestAsset;
 
-use ZfAnnotation\Annotation\Route;
+use ZfAnnotation\Annotation as Router;
 use Zend\Mvc\Controller\AbstractActionController;
 
 /**
- * @Route(name="root", route="/root")
+ * @Router\Route
  */
-class NoIndexRouteController extends AbstractActionController
+class InvalidRootRouteController extends AbstractActionController
 {
     /**
-     * @Route
+     * @Router\Route
      */
     public function indexAction()
     {}
 
     /**
-     * @Route
+     * @Router\Route
      */
     public function editAction()
     {}
 
     /**
-     * @Route
+     * @Router\Route
      */
     public function removeAction()
     {}

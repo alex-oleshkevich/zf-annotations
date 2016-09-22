@@ -4,20 +4,12 @@ namespace ZfAnnotationTest\Service;
 
 use ZfAnnotation\EventListener\ServiceListener;
 use ZfAnnotation\Exception\InvalidAnnotationException;
-use ZfAnnotation\Service\TestService\AbstractFactoryService;
-use ZfAnnotation\Service\TestService\CompleteServiceDefinition;
-use ZfAnnotation\Service\TestService\Delegator;
-use ZfAnnotation\Service\TestService\FactoryService;
-use ZfAnnotation\Service\TestService\InvalidAbstractFactoryService;
-use ZfAnnotation\Service\TestService\InvalidDelegator;
-use ZfAnnotation\Service\TestService\InvalidDelegatorNoFor;
-use ZfAnnotation\Service\TestService\InvalidFactoryService;
 use ZfAnnotationTest\AnnotationTestCase;
 
 class_alias(InvalidAnnotationException::class, 'ZfaInvalidAnnotationException');
 
 /**
- * @group service
+ * @group zfa-service
  */
 class ServiceTest extends AnnotationTestCase
 {
@@ -29,11 +21,11 @@ class ServiceTest extends AnnotationTestCase
 
     public function testReturnsAllData()
     {
-        $actual = $this->parse(CompleteServiceDefinition::class);
+        $actual = $this->parse(TestAsset\CompleteServiceDefinition::class);
         $expected = array(
             'my_service_manager' => array(
                 'invokables' => array(
-                    'complete_service' => 'ZfAnnotation\Service\TestService\CompleteServiceDefinition',
+                    'complete_service' => TestAsset\CompleteServiceDefinition::class,
                 ),
                 'shared' => array(
                     'complete_service' => false,
@@ -46,79 +38,81 @@ class ServiceTest extends AnnotationTestCase
         );
         $this->assertEquals($expected, $actual);
     }
-    
+
+    /**
+     * @group zfa-service-factory
+     */
     public function testFactoryService()
     {
-        $actual = $this->parse(FactoryService::class);
+        $actual = $this->parse(TestAsset\FactoryService::class);
         $expected = array(
             'service_manager' => array(
                 'factories' => array(
-                    'ZfAnnotation\Service\TestService\FactoryService' => 'ZfAnnotation\Service\TestService\FactoryService',
+                    TestAsset\FactoryService::class => TestAsset\FactoryService::class,
                 ),
             ),
         );
         $this->assertEquals($expected, $actual);
     }
-    
+
     /**
      * @expectedException ZfaInvalidAnnotationException
      */
     public function testInvalidFactoryService()
     {
-        $this->parse(InvalidFactoryService::class);
+        $this->parse(TestAsset\InvalidFactoryService::class);
     }
-    
+
     public function testAbstractFactoryService()
     {
-        $actual = $this->parse(AbstractFactoryService::class);
+        $actual = $this->parse(TestAsset\AbstractFactoryService::class);
         $expected = array(
             'service_manager' => array(
                 'abstract_factories' => array(
-                    'ZfAnnotation\Service\TestService\AbstractFactoryService',
+                    TestAsset\AbstractFactoryService::class,
                 ),
             ),
         );
         $this->assertEquals($expected, $actual);
     }
-    
+
     /**
      * @expectedException ZfaInvalidAnnotationException
      */
     public function testInvalidAbstractFactoryService()
     {
-        $this->parse(InvalidAbstractFactoryService::class);
+        $this->parse(TestAsset\InvalidAbstractFactoryService::class);
     }
-    
+
     public function testDelegator()
     {
-        $actual = $this->parse(Delegator::class);
+        $actual = $this->parse(TestAsset\Delegator::class);
         $expected = array(
             'service_manager' => array(
                 'delegators' => array(
                     'IndexController' => array(
-                        'ZfAnnotation\Service\TestService\Delegator',
+                        TestAsset\Delegator::class,
                     )
                 ),
             ),
         );
         $this->assertEquals($expected, $actual);
     }
-    
+
     /**
      * @expectedException ZfaInvalidAnnotationException
      */
     public function testInvalidDelegator()
     {
-        $this->parse(InvalidDelegator::class);
+        $this->parse(TestAsset\InvalidDelegator::class);
     }
-    
-    
+
     /**
      * @expectedException ZfaInvalidAnnotationException
      */
     public function testInvalidDelegatorNoFor()
     {
-        $this->parse(InvalidDelegatorNoFor::class);
+        $this->parse(TestAsset\InvalidDelegatorNoFor::class);
     }
-    
+
 }

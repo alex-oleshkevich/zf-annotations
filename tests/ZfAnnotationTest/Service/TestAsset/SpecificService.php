@@ -1,5 +1,5 @@
 <?php
-namespace ZfAnnotation\Service\SpecificService;
+namespace ZfAnnotationTest\Service\TestAsset;
 
 use ZfAnnotation\Annotation\Controller;
 use ZfAnnotation\Annotation\ControllerPlugin;

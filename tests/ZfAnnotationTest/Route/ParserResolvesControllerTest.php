@@ -6,7 +6,8 @@ use ZfAnnotation\EventListener\RouteListener;
 use ZfAnnotationTest\AnnotationTestCase;
 
 /**
- * @group resolve
+ * @group zfa-router
+ * @group zfa-router-resolve
  */
 class ParserResolvesControllerTest extends AnnotationTestCase
 {
@@ -21,11 +22,11 @@ class ParserResolvesControllerTest extends AnnotationTestCase
         $controllerConfig = array(
             'controllers' => array(
                 'invokables' => array(
-                    'AliasedController' => 'ZfAnnotationTest\Route\TestController\DefinedController'
+                    'AliasedController' => TestAsset\DefinedController::class
                 )
             )
         );
-        $route = $this->parse('ZfAnnotationTest\Route\TestController\DefinedController', $controllerConfig)['router']['routes']['index'];
+        $route = $this->parse(TestAsset\DefinedController::class, $controllerConfig)['router']['routes']['index'];
 
         $expected = array(
             'type' => 'literal',

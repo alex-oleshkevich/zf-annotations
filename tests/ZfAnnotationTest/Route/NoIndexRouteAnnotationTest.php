@@ -6,7 +6,8 @@ use ZfAnnotation\EventListener\RouteListener;
 use ZfAnnotationTest\AnnotationTestCase;
 
 /**
- * @group no-index
+ * @group zfa-router
+ * @group zfa-router-no-index
  */
 class NoIndexRouteAnnotationTest extends AnnotationTestCase
 {
@@ -18,7 +19,7 @@ class NoIndexRouteAnnotationTest extends AnnotationTestCase
 
     public function testIndexRouteCorrected()
     {
-        $config = $this->parse('ZfAnnotationTest\Route\TestController\NoIndexRouteController')['router']['routes'];
+        $config = $this->parse(TestAsset\NoIndexRouteController::class)['router']['routes'];
 
         $expected = array(
             'root' => array(
@@ -27,7 +28,7 @@ class NoIndexRouteAnnotationTest extends AnnotationTestCase
                 'options' => array(
                     'route' => '/root',
                     'defaults' => array(
-                        'controller' => 'ZfAnnotationTest\Route\TestController\NoIndexRouteController',
+                        'controller' => TestAsset\NoIndexRouteController::class,
                         'action' => 'index'
                     ),
                     'constraints' => null
@@ -40,7 +41,7 @@ class NoIndexRouteAnnotationTest extends AnnotationTestCase
                         'options' => array(
                             'route' => '/index',
                             'defaults' => array(
-                                'controller' => 'ZfAnnotationTest\Route\TestController\NoIndexRouteController',
+                                'controller' => TestAsset\NoIndexRouteController::class,
                                 'action' => 'index'
                             ),
                             'constraints' => null
@@ -54,7 +55,7 @@ class NoIndexRouteAnnotationTest extends AnnotationTestCase
                         'options' => array(
                             'route' => '/edit',
                             'defaults' => array(
-                                'controller' => 'ZfAnnotationTest\Route\TestController\NoIndexRouteController',
+                                'controller' => TestAsset\NoIndexRouteController::class,
                                 'action' => 'edit'
                             ),
                             'constraints' => null
@@ -68,7 +69,7 @@ class NoIndexRouteAnnotationTest extends AnnotationTestCase
                         'options' => array(
                             'route' => '/remove',
                             'defaults' => array(
-                                'controller' => 'ZfAnnotationTest\Route\TestController\NoIndexRouteController',
+                                'controller' => TestAsset\NoIndexRouteController::class,
                                 'action' => 'remove'
                             ),
                             'constraints' => null

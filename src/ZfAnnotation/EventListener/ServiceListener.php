@@ -10,7 +10,7 @@
 
 namespace ZfAnnotation\EventListener;
 
-use Zend\Code\Scanner\ClassScanner;
+use ReflectionClass;
 use Zend\EventManager\AbstractListenerAggregate;
 use Zend\EventManager\EventManagerInterface;
 use Zend\ServiceManager\Factory\AbstractFactoryInterface;
@@ -56,7 +56,7 @@ class ServiceListener extends AbstractListenerAggregate
         $event->mergeResult($this->definitions);
     }
 
-    public function handleClassAnnotation(Service $annotation, ClassScanner $class)
+    public function handleClassAnnotation(Service $annotation, ReflectionClass $class)
     {
         if (!$annotation->getName()) {
             $annotation->setName($class->getName());
@@ -74,20 +74,20 @@ class ServiceListener extends AbstractListenerAggregate
                 if (!empty($annotation->getFactoryClass())) {
                     $this->definitions[$annotation->getServiceManager()]['factories'][$annotation->getName()] = $annotation->getFactoryClass();
                 } else {
-                    if (!in_array(FactoryInterface::class, $class->getInterfaces())) {
+                    if (!in_array(FactoryInterface::class, $class->getInterfaceNames())) {
                         throw new InvalidAnnotationException('Service factory class must implement "' . FactoryInterface::class . '".');
                     }
                     $this->definitions[$annotation->getServiceManager()]['factories'][$annotation->getName()] = $class->getName();
                 }
                 break;
             case 'abstractFactory':
-                if (!in_array(AbstractFactoryInterface::class, $class->getInterfaces())) {
+                if (!in_array(AbstractFactoryInterface::class, $class->getInterfaceNames())) {
                     throw new InvalidAnnotationException('Abstract service factory class must implement "' . AbstractFactoryInterface::class . '".');
                 }
                 $this->definitions[$annotation->getServiceManager()]['abstract_factories'][] = $class->getName();
                 break;
             case 'delegator':
-                if (!in_array(DelegatorFactoryInterface::class, $class->getInterfaces())) {
+                if (!in_array(DelegatorFactoryInterface::class, $class->getInterfaceNames())) {
                     throw new InvalidAnnotationException('Delegator must implement "' . DelegatorFactoryInterface::class . '".');
                 }
                 if (empty($annotation->getFor())) {

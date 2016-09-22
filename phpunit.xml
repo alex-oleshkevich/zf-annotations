@@ -2,7 +2,7 @@
 <phpunit colors="true"
          stderr="true"
          backupGlobals="false"
-         bootstrap="bootstrap.php"
+         bootstrap="tests/bootstrap.php"
          convertErrorsToExceptions="false"
          convertNoticesToExceptions="false"
          convertWarningsToExceptions="false"
@@ -12,7 +12,7 @@
 
     <testsuites>
         <testsuite name="ZfAnnotation">
-            <directory>ZfAnnotationTest/</directory>
+            <directory>tests/ZfAnnotationTest/</directory>
         </testsuite>
     </testsuites>
 </phpunit>

@@ -3,53 +3,52 @@
 namespace ZfAnnotationTest\Factory;
 
 use PHPUnit_Framework_TestCase;
-use Zend\Code\Annotation\AnnotationManager;
 use Zend\EventManager\EventManager;
 use Zend\ServiceManager\ServiceManager;
+use ZfAnnotation\Factory\AnnotationReaderFactory;
+use ZfAnnotation\Factory\ClassParserFactory;
 use ZfAnnotation\Parser\ClassParser;
-use ZfAnnotation\Service\AnnotationManagerFactory;
-use ZfAnnotation\Service\ClassParserFactory;
-use ZfAnnotation\Service\DoctrineAnnotationParserFactory;
 
 /**
  * Description of ClassParserCreateFactoryTest
  *
- * @group zfa-factories
- * @group zfa-class-parser
+ * @group zfa-factory
+ * @group zfa-factory-classparser
  * @author Alex Oleshkevich <alex.oleshkevich@gmail.com>
  */
 class ClassParserCreateFactoryTest extends PHPUnit_Framework_TestCase
 {
+
+    protected $config = [
+        'zf_annotation' => [
+            'ignored_annotations' => [],
+            'annotations' => [],
+            'namespaces' => [],
+            'event_listeners' => [],
+            'cache' => null,
+            'cache_debug' => true
+        ]
+    ];
+
     public function testCanCreateViaServiceManager()
     {
         $sm = new ServiceManager([
             'factories' => [
-                'ZfAnnotation\DoctrineAnnotationParser' => DoctrineAnnotationParserFactory::class,
-                'ZfAnnotation\AnnotationManager' => AnnotationManagerFactory::class,
-                'ClassParser' => ClassParserFactory::class
+                'ZfAnnotation\AnnotationReader' => AnnotationReaderFactory::class,
+                'ClassParser' => ClassParserFactory::class,
             ]
         ]);
         $sm->setService('EventManager', new EventManager);
-        $sm->setService('Config', [
-            'zf_annotation' => [
-                'annotations' => [],
-                'event_listeners' => []
-            ]
-        ]);
-        
+        $sm->setService('Config', $this->config);
+
         $this->assertInstanceOf(ClassParser::class, $sm->get('ClassParser'));
     }
 
     public function testCanCreateViaStaticMethod()
     {
-        $config = [
-            'zf_annotation' => [
-                'annotations' => [],
-                'event_listeners' => []
-            ]
-        ];
         $eventManager = new EventManager;
-        $annotationManager = new AnnotationManager;
-        $this->assertInstanceOf(ClassParser::class, ClassParserFactory::factory($config, $eventManager, $annotationManager));
+        $annotationReader = AnnotationReaderFactory::factory($this->config['zf_annotation']);
+        $this->assertInstanceOf(ClassParser::class, ClassParserFactory::factory($this->config, $eventManager, $annotationReader));
     }
+
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace ZfAnnotation\Service\TestService;
+namespace ZfAnnotationTest\Service\TestAsset;
 
 use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\Factory\FactoryInterface;

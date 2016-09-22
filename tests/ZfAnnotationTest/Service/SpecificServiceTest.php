@@ -3,11 +3,10 @@
 namespace ZfAnnotationTest\Service;
 
 use ZfAnnotation\EventListener\ServiceListener;
-use ZfAnnotation\Service\SpecificService\SpecificService;
 use ZfAnnotationTest\AnnotationTestCase;
 
 /**
- * @group service
+ * @group zfa-service
  */
 class SpecificServiceTest extends AnnotationTestCase
 {
@@ -16,7 +15,7 @@ class SpecificServiceTest extends AnnotationTestCase
     protected function setUp()
     {
         $this->listener = new ServiceListener;
-        $this->config = $this->parse(SpecificService::class);
+        $this->config = $this->parse(TestAsset\SpecificService::class);
     }
 
     public function testController()
