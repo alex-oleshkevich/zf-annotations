@@ -20,6 +20,9 @@ The goal of this project is to get rid of large configuration arrays in applicat
 
 2. Since version 2.3 the module does not uses [zendframework/zend-code](https://github.com/zendframework/zend-code) as a backend and uses [doctrine/annotations](https://github.com/doctrine/annotations) directly. See [doctrine documentation](http://docs.doctrine-project.org/projects/doctrine-common/en/latest/reference/annotations.html) for more details and options.
 
+### Deprecations
+1. Config option "annotations" deprecated in favor of "namespaces".
+
 ### Installation
 ##### Require via composer
 
@@ -44,7 +47,8 @@ array(
     'zf_annotation' => array(
         // in which modules to search annotated classes
         'scan_modules' => array(),
-                             
+
+        // DEPRECATED!                             
         // here listed all annotations supported by the module
         // add your own here
         'annotations' => array(
