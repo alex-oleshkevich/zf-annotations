@@ -3,10 +3,13 @@ This module operates with 2 main concepts: Annotation and EventListener.
 In order to add support of custom annotation you have to implement annotation class and its listener.
 
 #### Annotation class
-This class must implement `Zend\Code\Annotation\AnnotationInterface` and contain public properties which are used as annotation options:
+This class must be annotated with `@Annotation` (see [doctine docs ofr more info](http://docs.doctrine-project.org/projects/doctrine-common/en/latest/reference/annotations.html)):
 
 ```php
-class MyAnnotation implements Zend\Code\Annotation\AnnotationInterface
+/**
+ * @Annotation
+ */
+class MyAnnotation
 {
     public $option1;
     public $optionsArray = array();
