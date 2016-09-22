@@ -10,7 +10,7 @@
 
 namespace ZfAnnotation\Factory;
 
-use Doctrine\Common\Annotations\AnnotationReader;
+use Doctrine\Common\Annotations\Reader;
 use Interop\Container\ContainerInterface;
 use Zend\EventManager\EventManager;
 use Zend\EventManager\EventManagerInterface;
@@ -55,10 +55,10 @@ class ClassParserFactory implements FactoryInterface
      * 
      * @param array $config
      * @param EventManagerInterface $eventManager
-     * @param AnnotationReader $annotationReader
+     * @param Reader $annotationReader
      * @return ClassParser
      */
-    public static function factory(array $config, EventManagerInterface $eventManager, AnnotationReader $annotationReader = null)
+    public static function factory(array $config, EventManagerInterface $eventManager, Reader $annotationReader = null)
     {
         if (null === $annotationReader) {
             $annotationReader = AnnotationReaderFactory::factory($config['zf_annotation']);

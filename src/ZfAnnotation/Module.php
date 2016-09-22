@@ -18,8 +18,9 @@ use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\ModuleManager\Feature\InitProviderInterface;
 use Zend\ModuleManager\ModuleEvent;
 use Zend\ModuleManager\ModuleManagerInterface;
+use ZfAnnotation\Factory\AnnotationReaderFactory;
+use ZfAnnotation\Factory\ClassParserFactory;
 use ZfAnnotation\Parser\DirectoryScanner;
-use ZfAnnotation\Service\ClassParserFactory;
 
 class Module implements AutoloaderProviderInterface, InitProviderInterface, ConfigProviderInterface
 {
@@ -41,7 +42,7 @@ class Module implements AutoloaderProviderInterface, InitProviderInterface, Conf
     {
         // do not parse annotations if config cache is enabled.
         $config = $event->getConfigListener()->getMergedConfig(false);
-        $annotationReader = Factory\AnnotationReaderFactory::factory($config['zf_annotation']);
+        $annotationReader = AnnotationReaderFactory::factory($config['zf_annotation']);
         $parser = ClassParserFactory::factory($config, $event->getTarget()->getEventManager(), $annotationReader);
         $scanner = new DirectoryScanner;
         $classesToParse = [];

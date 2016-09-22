@@ -58,15 +58,13 @@ class AnnotationReaderFactory implements FactoryInterface
 //            die;
 //        });
 
-
-        if (is_string($config['cache'])) {
-            $reader = new CachedReader(new AnnotationReader, new FilesystemCache($config['cache'], 'cache'), $config['cache_debug']);
-        } else {
-            $reader = new AnnotationReader;
-        }
-        
+        $reader = new AnnotationReader;
         foreach ($config['ignored_annotations'] as $ignore) {
             $reader->addGlobalIgnoredName($ignore);
+        }
+        
+        if (is_string($config['cache'])) {
+            $reader = new CachedReader($reader, new FilesystemCache($config['cache'], 'cache'), $config['cache_debug']);
         }
 
         return $reader;

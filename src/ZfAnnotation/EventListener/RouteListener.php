@@ -79,7 +79,7 @@ class RouteListener extends AbstractListenerAggregate
                 if (!$methodAnnotation instanceof Route) {
                     continue;
                 }
-
+                
                 $this->handleMethodAnnotation($methodAnnotation, $classAnnotations, $classHolder->getClass(), $methodHolder->getMethod());
             }
         }

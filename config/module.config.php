@@ -14,6 +14,9 @@ use ZfAnnotation\Service\ClassParserFactory;
  */
 return [
     'zf_annotation' => [
+        'ignored_annotations' => [
+            'events'
+        ],
         'scan_modules' => [],
         'namespaces' => [
             'ZfAnnotation\Annotation'
@@ -23,8 +26,8 @@ return [
             RouteListener::class,
             ServiceListener::class
         ],
-        'cache' => sys_get_temp_dir() . '/zfa-cache',
-        'cache_debug' => false
+        'cache' => null,
+        'cache_debug' => true
     ],
     'service_manager' => [
         'factories' => [

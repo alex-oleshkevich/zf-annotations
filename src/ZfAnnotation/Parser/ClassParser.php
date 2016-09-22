@@ -10,7 +10,7 @@
 
 namespace ZfAnnotation\Parser;
 
-use Doctrine\Common\Annotations\AnnotationReader;
+use Doctrine\Common\Annotations\Reader;
 use ReflectionClass;
 use Zend\EventManager\EventManager;
 use Zend\EventManager\ListenerAggregateInterface;
@@ -30,7 +30,7 @@ class ClassParser
     protected $config = [];
 
     /**
-     * @var AnnotationReader
+     * @var Reader
      */
     protected $annotationReader;
 
@@ -41,10 +41,10 @@ class ClassParser
 
     /**
      * @param array $config
-     * @param AnnotationReader $annotationReader
+     * @param Reader $annotationReader
      * @param EventManager $eventManager
      */
-    public function __construct(array $config, AnnotationReader $annotationReader, EventManager $eventManager)
+    public function __construct(array $config, Reader $annotationReader, EventManager $eventManager)
     {
         $this->config = $config;
         $this->annotationReader = $annotationReader;
