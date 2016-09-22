@@ -12,4 +12,4 @@ before_script:
  - php composer.phar install --prefer-dist --dev
 
 script:
- - (cd tests ; phpunit)
+ - phpunit
