@@ -18,7 +18,7 @@
         "zendframework/zend-eventmanager": "^2.6 || ~3.0",
         "zendframework/zend-modulemanager": "~2.6",
         "doctrine/common": "^2.6",
-        "doctrine/annotations": "^2.6",
+        "doctrine/annotations": "^1.2",
         "alex-oleshkevich/classnames": "^1.0",
         "zendframework/zend-mvc": "^2.6 || ^3.0"
     },
