@@ -53,10 +53,6 @@ class AnnotationReaderFactory implements FactoryInterface
     {
         $annotations = $config['annotations'];
         AnnotationRegistry::registerAutoloadNamespaces($config['namespaces']);
-//        AnnotationRegistry::registerLoader(function ($class) {
-//            var_dump($class);
-//            die;
-//        });
 
         $reader = new AnnotationReader;
         foreach ($config['ignored_annotations'] as $ignore) {
