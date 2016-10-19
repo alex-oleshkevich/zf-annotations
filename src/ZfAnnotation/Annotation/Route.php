@@ -322,7 +322,7 @@ class Route
      *
      * @param AnnotationInterface $annotation
      */
-    public function extend(AnnotationInterface $annotation)
+    public function extend($annotation)
     {
         $params = get_object_vars($annotation);
         foreach ($params as $property => $value) {
