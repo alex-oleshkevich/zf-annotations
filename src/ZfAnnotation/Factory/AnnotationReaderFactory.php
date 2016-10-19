@@ -51,7 +51,6 @@ class AnnotationReaderFactory implements FactoryInterface
      */
     public static function factory(array $config)
     {
-        $annotations = $config['annotations'];
         AnnotationRegistry::registerAutoloadNamespaces($config['namespaces']);
 
         $reader = new AnnotationReader;
