@@ -48,7 +48,7 @@ array(
         // in which modules to search annotated classes
         'scan_modules' => array(),
 
-        // DEPRECATED!                             
+        // DEPRECATED AND REMOVED IN 2.3
         // here listed all annotations supported by the module
         // add your own here
         'annotations' => array(
