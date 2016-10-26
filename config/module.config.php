@@ -3,7 +3,7 @@
 use ZfAnnotation\EventListener\RouteListener;
 use ZfAnnotation\EventListener\ServiceListener;
 use ZfAnnotation\Factory\AnnotationReaderFactory;
-use ZfAnnotation\Service\ClassParserFactory;
+use ZfAnnotation\Factory\ClassParserFactory;
 
 /**
  * Annotated Router module for Zend Framework 2
