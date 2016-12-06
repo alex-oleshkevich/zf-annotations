@@ -93,11 +93,4 @@ class Module implements AutoloaderProviderInterface, InitProviderInterface, Conf
         return include __DIR__ . '/../../config/module.config.php';
     }
 
-    public function getConsoleUsage()
-    {
-        return [
-            'config dump' => 'Compiles config and dump into cache file.',
-        ];
-    }
-
 }
