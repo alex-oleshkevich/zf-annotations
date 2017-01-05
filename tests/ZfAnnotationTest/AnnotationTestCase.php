@@ -22,9 +22,9 @@ class AnnotationTestCase extends PHPUnit_Framework_TestCase
      * 
      * @param string $class
      * @param array $config
-     * @return ClassAnnotationHolder
+     * @return ClassParser
      */
-    public function parse($class, array $config = array())
+    public function createParser(array $config = array())
     {
         $annotationReader = AnnotationReaderFactory::factory([
             'annotations' => [],
@@ -39,7 +39,19 @@ class AnnotationTestCase extends PHPUnit_Framework_TestCase
         ]);
 
         $eventManager = new EventManager;
-        $parser = new ClassParser($config, $annotationReader, $eventManager);
+        return new ClassParser($config, $annotationReader, $eventManager);        
+    }
+    
+    
+    /**
+     * 
+     * @param string $class
+     * @param array $config
+     * @return ClassAnnotationHolder
+     */
+    public function parse($class, array $config = array())
+    {
+        $parser = $this->createParser($config);
         return $this->handleClassAnnotations($parser->parseClass($class), $config);
     }
 
