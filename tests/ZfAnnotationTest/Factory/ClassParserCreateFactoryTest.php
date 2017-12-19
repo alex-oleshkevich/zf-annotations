@@ -2,7 +2,7 @@
 
 namespace ZfAnnotationTest\Factory;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Zend\EventManager\EventManager;
 use Zend\ServiceManager\ServiceManager;
 use ZfAnnotation\Factory\AnnotationReaderFactory;
@@ -16,7 +16,7 @@ use ZfAnnotation\Parser\ClassParser;
  * @group zfa-factory-classparser
  * @author Alex Oleshkevich <alex.oleshkevich@gmail.com>
  */
-class ClassParserCreateFactoryTest extends PHPUnit_Framework_TestCase
+class ClassParserCreateFactoryTest extends TestCase
 {
 
     protected $config = [

@@ -4,7 +4,7 @@ namespace ZfAnnotationTest\Factory;
 
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\CachedReader;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Zend\ServiceManager\ServiceManager;
 use ZfAnnotation\Factory\AnnotationReaderFactory;
 
@@ -13,7 +13,7 @@ use ZfAnnotation\Factory\AnnotationReaderFactory;
  * @group zfa-factory
  * @author Alex Oleshkevich <alex.oleshkevich@gmail.com>
  */
-class AnnotationReaderFactoryTest extends PHPUnit_Framework_TestCase
+class AnnotationReaderFactoryTest extends TestCase
 {
 
     protected $config = [

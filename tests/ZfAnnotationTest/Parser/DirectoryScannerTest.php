@@ -2,7 +2,7 @@
 
 namespace ZfAnnotationTest\Parser;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use ZfAnnotation\Parser\DirectoryScanner;
 use ZfAnnotationTest\Parser\Assets\ClassAsset;
@@ -10,7 +10,7 @@ use ZfAnnotationTest\Parser\Assets\ClassAsset;
 /**
  * @group zfa-parser
  */
-class DirectoryScannerTest extends PHPUnit_Framework_TestCase
+class DirectoryScannerTest extends TestCase
 {
 
     public function testYieldsClasses()

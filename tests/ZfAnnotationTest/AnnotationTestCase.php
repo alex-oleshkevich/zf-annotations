@@ -2,7 +2,7 @@
 
 namespace ZfAnnotationTest;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Zend\EventManager\AbstractListenerAggregate;
 use Zend\EventManager\EventManager;
 use ZfAnnotation\Event\ParseEvent;
@@ -10,7 +10,7 @@ use ZfAnnotation\Factory\AnnotationReaderFactory;
 use ZfAnnotation\Parser\ClassAnnotationHolder;
 use ZfAnnotation\Parser\ClassParser;
 
-class AnnotationTestCase extends PHPUnit_Framework_TestCase
+class AnnotationTestCase extends TestCase
 {
     /**
      *
