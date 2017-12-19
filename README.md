@@ -13,10 +13,10 @@ The goal of this project is to get rid of large configuration arrays in applicat
 ![Deps. Status](https://www.versioneye.com/user/projects/54d47c133ca08495310002b0/badge.svg?style=flat)
 
 ### Requirements
-* PHP >= 5.5.0
+* PHP >= 7.0.0
 
 ### Please, note
-1. if you want to use Zend libraries from Zend Framework 2, use ~1.0 versions. Branch ~2.0 supports future versions of Zend Framework and may not be compatible with ZF 2.
+1. if you want to use Zend libraries from Zend Framework 2, use ~1.0 versions. Branch ~2.0 supports future versions of Zend Framework and may not be compatible with ZF 1.
 
 2. Since version 2.3 the module does not uses [zendframework/zend-code](https://github.com/zendframework/zend-code) as a backend and uses [doctrine/annotations](https://github.com/doctrine/annotations) directly. See [doctrine documentation](http://docs.doctrine-project.org/projects/doctrine-common/en/latest/reference/annotations.html) for more details and options.
 
