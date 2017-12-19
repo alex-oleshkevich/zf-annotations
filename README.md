@@ -18,7 +18,7 @@ The goal of this project is to get rid of large configuration arrays in applicat
 ### Please, note
 1. if you want to use Zend libraries from Zend Framework 2, use ~1.0 versions. Branch ~2.0 supports future versions of Zend Framework and may not be compatible with ZF 1.
 
-2. Since version 2.3 the module does not uses [zendframework/zend-code](https://github.com/zendframework/zend-code) as a backend and uses [doctrine/annotations](https://github.com/doctrine/annotations) directly. See [doctrine documentation](http://docs.doctrine-project.org/projects/doctrine-common/en/latest/reference/annotations.html) for more details and options.
+2. Since version 2.3 the module does not use [zendframework/zend-code](https://github.com/zendframework/zend-code) as a backend and use [doctrine/annotations](https://github.com/doctrine/annotations) directly. See [doctrine documentation](http://docs.doctrine-project.org/projects/doctrine-common/en/latest/reference/annotations.html) for more details and options.
 
 ### Deprecations
 1. Config option "annotations" deprecated in favor of "namespaces".
